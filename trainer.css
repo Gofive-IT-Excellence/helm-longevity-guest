@@ -1,0 +1,32 @@
+/* HELM trainer chat and six-item navigation. */
+@media(max-width:760px){.bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr))}.bottom-nav button{font-size:9px;gap:2px}.bottom-nav button svg{width:20px;height:20px}.bottom-nav button span{letter-spacing:-.02em}}
+@media(max-width:360px){.bottom-nav button{font-size:8px}}
+.trainer-page{width:100%;max-width:720px;min-width:0;margin:0 auto;min-height:calc(100dvh - 260px);display:flex;flex-direction:column}
+.trainer-heading{display:flex;align-items:center;gap:12px;margin:5px 0 12px}
+.trainer-heading-mark{width:48px;height:48px;flex:none;display:grid;place-items:center;border-radius:16px;color:#0872e3;background:#e4f5ff}
+.trainer-heading-mark svg{width:27px;height:27px}
+.trainer-heading h1{margin:0;color:#123d76;font-size:24px;line-height:1.2;font-weight:400}
+.trainer-heading p{margin:1px 0 0;color:#6984a8;font-size:13px}
+.trainer-status{margin-left:auto;flex:none;padding:6px 9px;border:1px solid #d4e6fa;border-radius:999px;color:#6783a5;background:#f8fbff;font-size:10px}
+.trainer-chat{min-height:260px;flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 0 18px}
+.trainer-message{max-width:88%;margin:0;padding:12px 15px;border-radius:17px;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.trainer-message.user{align-self:flex-end;border-bottom-right-radius:5px;color:#fff;background:#086fe2}
+.trainer-message.assistant{align-self:flex-start;max-width:100%;border:1px solid #dce9f9;border-bottom-left-radius:5px;color:#173d70;background:#fff;box-shadow:0 6px 18px #0b5dad0c}
+.trainer-message.system{align-self:flex-start;border:1px solid #dce9f9;border-bottom-left-radius:5px;color:#5d779a;background:#fff}
+.trainer-message p{margin:0}.trainer-message p+p,.trainer-message p+ul,.trainer-message p+ol,.trainer-message ul+p,.trainer-message ol+p{margin-top:10px}
+.trainer-message ul,.trainer-message ol{margin:0;padding-left:21px}.trainer-message li+li{margin-top:7px}
+.trainer-message strong{color:#095fc1}.trainer-message code{padding:1px 4px;border-radius:5px;background:#eaf4ff;font:inherit}
+.trainer-message-photo{display:block;width:min(220px,100%);max-height:220px;object-fit:cover;margin-top:9px;border-radius:12px}
+.trainer-photo-preview{display:flex;align-items:center;gap:9px;margin:0 0 8px;padding:7px 9px;border:1px solid #cfe4fa;border-radius:14px;color:#3c6798;background:#fff;font-size:12px}
+.trainer-photo-preview img{width:43px;height:43px;object-fit:cover;border-radius:9px}.trainer-photo-preview span{flex:1}.trainer-photo-preview button{width:30px;height:30px;border:0;border-radius:50%;color:#557ca8;background:#ecf5ff;font-size:21px}
+.trainer-compose{position:sticky;bottom:76px;box-sizing:border-box;display:flex;align-items:center;gap:9px;width:100%;max-width:100%;padding:8px;border:1px solid #d8e7f9;border-radius:19px;background:#fff;box-shadow:0 8px 25px #0b5dad12}
+.trainer-compose input{flex:1;min-width:0;padding:9px 8px;border:0;outline:0;background:transparent;color:#173d70;font:inherit;font-size:16px}
+.trainer-compose input::placeholder{color:#91a5bf}
+.trainer-compose:focus-within{border-color:#5cb7f4;box-shadow:0 0 0 3px #4caeff21}
+.trainer-compose button{width:40px;height:40px;flex:none;display:grid;place-items:center;border:0;border-radius:13px;background:#0779e9;color:#fff;font:inherit;font-size:20px;cursor:pointer}
+.trainer-compose .trainer-attach{width:34px;height:36px;border-radius:10px;color:#0872e3;background:#edf6ff}.trainer-compose .trainer-attach svg{width:19px;height:19px}
+.trainer-compose .trainer-file-input{display:none}
+.trainer-compose button:disabled{background:#c7d8ed;cursor:default}
+.trainer-note{margin:8px 2px 0;color:#8299b4;font-size:11px;line-height:1.4;text-align:center}
+@media(min-width:761px){.trainer-page{min-height:calc(100dvh - 210px)}.trainer-compose{bottom:20px}}
+@media(max-width:380px){.trainer-compose{gap:5px;padding:6px}.trainer-compose .trainer-attach{width:30px}.trainer-compose input[name="message"]{padding-inline:3px}}

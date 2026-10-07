@@ -1,8 +1,8 @@
 // Public GitHub Pages client. Personal records stay in this browser.
 const INITIAL_STATE=JSON.parse(JSON.stringify(state));
 let signedIn=false;
-const previewMode=false; // AI is available in this guest pilot.
 const cfg=window.HELM_CONFIG||{};
+const previewMode=cfg.aiEnabled!==true; // Enable only after the n8n workflow is verified and published.
 const LOCAL_STORAGE_KEY="helm-longevity-guest-v1";
 function stateForStorage(){const copy=JSON.parse(JSON.stringify(state));copy.photo=null;for(const meal of copy.meals||[])meal.photo=null;return copy}
 persist=function(){try{localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(stateForStorage()))}catch{toast("พื้นที่จัดเก็บในเครื่องเต็ม")}};

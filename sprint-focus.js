@@ -14,6 +14,7 @@ navHTML = function () {
 home = function () {
   return `<div class="sprint-home">
     ${header("สแกนอาหาร ดูแคลอรี", "ถ่ายหรือเลือกรูปอาหาร แล้วตรวจค่าประมาณจาก HELM")}
+    ${previewMode ? '<p class="sprint-status" role="status">ตอนนี้ดูหน้าสแกนได้ แต่การวิเคราะห์แคลอรีด้วย HELM ยังรอเปิดระบบเชื่อมต่อ</p>' : ''}
     <section class="sprint-primary" aria-label="สแกนอาหาร">
       <div class="sprint-primary-copy"><span class="eyebrow">HELM FOOD SCAN</span>
         <h2>มื้อนี้ประมาณกี่แคล?</h2>
@@ -54,6 +55,8 @@ review = function () {
     .replace("ตรวจวัตถุดิบและสารอาหารก่อนบันทึก", "ดูค่าประมาณและแก้ชื่ออาหารได้")
     .replace(/<form id="food-review-form" class="review-save">[\s\S]*?<\/form>/, "")
     .replaceAll("ก่อนบันทึก", "ก่อนนำไปใช้")
+    .replace("โหมดทดลอง: บันทึกอาหารด้วยตนเองได้ ส่วนการวิเคราะห์รูปจะเปิดหลังเชื่อมบัญชีบริษัท", "การวิเคราะห์แคลอรีด้วย HELM ยังรอเปิดระบบเชื่อมต่อ")
+    .replace("วิเคราะห์รูปด้วย HELM (รอเชื่อมต่อ)", "วิเคราะห์แคลอรี (รอเปิดระบบ)")
     .replace("ตรวจอาหารในจาน", "ตรวจชื่ออาหารและปริมาณจริง");
 };
 

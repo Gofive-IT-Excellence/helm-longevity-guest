@@ -548,6 +548,7 @@ body.authenticated .auth-root{display:none}
 .sprint-wheel-icon{display:grid;place-items:center;width:56px;height:56px;border-radius:17px;background:#e6f4ff}
 .sprint-wheel-link>svg{width:22px}
 .sprint-disclaimer{margin:0;color:#8194af;font-size:13px;line-height:1.5}
+.sprint-status{margin:0;padding:12px 16px;border:1px solid #ffdf9e;border-radius:14px;background:#fff9e8;color:#765619;font-size:14px;line-height:1.5}
 .topbar-right .shift-pill,.mobile-brand .shift-pill{display:none}
 @media(max-width:760px){
   .bottom-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -806,8 +807,8 @@ document.addEventListener("click",e=>{const button=e.target.closest("[data-actio
 // Public GitHub Pages client. Personal records stay in this browser.
 const INITIAL_STATE=JSON.parse(JSON.stringify(state));
 let signedIn=false;
-const previewMode=false; // AI is available in this guest pilot.
 const cfg=window.HELM_CONFIG||{};
+const previewMode=cfg.aiEnabled!==true; // Enable only after the n8n workflow is verified and published.
 const LOCAL_STORAGE_KEY="helm-longevity-guest-v1";
 function stateForStorage(){const copy=JSON.parse(JSON.stringify(state));copy.photo=null;for(const meal of copy.meals||[])meal.photo=null;return copy}
 persist=function(){try{localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(stateForStorage()))}catch{toast("พื้นที่จัดเก็บในเครื่องเต็ม")}};
@@ -1293,6 +1294,7 @@ navHTML = function () {
 home = function () {
   return `<div class="sprint-home">
     ${header("สแกนอาหาร ดูแคลอรี", "ถ่ายหรือเลือกรูปอาหาร แล้วตรวจค่าประมาณจาก HELM")}
+    ${previewMode ? '<p class="sprint-status" role="status">ตอนนี้ดูหน้าสแกนได้ แต่การวิเคราะห์แคลอรีด้วย HELM ยังรอเปิดระบบเชื่อมต่อ</p>' : ''}
     <section class="sprint-primary" aria-label="สแกนอาหาร">
       <div class="sprint-primary-copy"><span class="eyebrow">HELM FOOD SCAN</span>
         <h2>มื้อนี้ประมาณกี่แคล?</h2>
@@ -1333,6 +1335,8 @@ review = function () {
     .replace("ตรวจวัตถุดิบและสารอาหารก่อนบันทึก", "ดูค่าประมาณและแก้ชื่ออาหารได้")
     .replace(/<form id="food-review-form" class="review-save">[\s\S]*?<\/form>/, "")
     .replaceAll("ก่อนบันทึก", "ก่อนนำไปใช้")
+    .replace("โหมดทดลอง: บันทึกอาหารด้วยตนเองได้ ส่วนการวิเคราะห์รูปจะเปิดหลังเชื่อมบัญชีบริษัท", "การวิเคราะห์แคลอรีด้วย HELM ยังรอเปิดระบบเชื่อมต่อ")
+    .replace("วิเคราะห์รูปด้วย HELM (รอเชื่อมต่อ)", "วิเคราะห์แคลอรี (รอเปิดระบบ)")
     .replace("ตรวจอาหารในจาน", "ตรวจชื่ออาหารและปริมาณจริง");
 };
 

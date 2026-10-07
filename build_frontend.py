@@ -41,6 +41,7 @@ replace_once('state.draftItems=Array.isArray(state.draftItems)?state.draftItems:
 replace_once('const photoOf=m=>m.photo||MEAL;', '''const EMPTY_MEAL_IMAGE="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect width="600" height="400" fill="#edf4ff"/><circle cx="300" cy="195" r="115" fill="#fff" stroke="#b7d0fa" stroke-width="16"/><circle cx="300" cy="195" r="70" fill="#f8fbff"/><path d="M95 95v210M75 95v85M115 95v85M505 95v210" fill="none" stroke="#0054c9" stroke-linecap="round" stroke-width="17"/><circle cx="300" cy="195" r="28" fill="#ff7058"/></svg>');
 const photoOf=m=>m.photo||EMPTY_MEAL_IMAGE;''')
 replace_once('photo:state.photo||MEAL,items:state.draftItems.map', 'photo:state.photo||null,items:state.draftItems.map')
+replace_once('<span class="food-emoji" aria-hidden="true">${m.emoji}</span>', '<span class="food-emoji" aria-hidden="true">${esc(m.emoji)}</span>')
 replace_once('state.photo=withSample?MEAL:null;', 'state.photo=null;')
 replace_once('state.photo=MEAL;render()', 'state.photo=null;render()')
 source = source.replace('alt="ภาพอาหารล่าสุด"', 'alt="ภาพประกอบอาหารหรือภาพอาหารล่าสุด"')

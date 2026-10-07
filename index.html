@@ -782,7 +782,7 @@ const wheelItem=name=>FOOD_DB.find(item=>item.name===name);
 const wheelEnergy=meal=>meal.items.reduce((sum,name)=>sum+num(wheelItem(name)?.kcal),0);
 function wheelResultHTML(){if(wheelResultIndex<0)return "";const meal=WHEEL_MEALS[wheelResultIndex];return `<div class="wheel-result-heading"><img class="mascot-win" data-mascot="thumbs" alt="น้อง HELM ยกนิ้วให้"><div><span class="eyebrow">ผลที่สุ่มได้ ${meal.emoji} ✨</span><h2>${esc(meal.name)}</h2></div></div><p>พลังงานตัวอย่างประมาณ ${wheelEnergy(meal)} kcal ต่อมื้อ • ตรวจปริมาณจริงก่อนบันทึก</p><div class="wheel-result-actions"><button class="solid-button" data-action="wheel-camera">${icon("camera")} ซื้อแล้วถ่ายรูปเมนูนี้</button><button class="ghost-button" data-action="wheel-gallery">${icon("upload")} เลือกรูปจากคลัง</button><button class="ghost-button" data-action="wheel-log">ตรวจและบันทึก</button><button class="ghost-button" data-action="spin-wheel">หมุนอีกครั้ง</button></div>`}
 function wheelPage(){return `<div class="subpage wheel-page"><div class="wheel-intro"><div>${header("วันนี้กินอะไรดี","คิดไม่ออก ลองหมุนวงล้อเลือกเมนู")}<p class="wheel-lead">เมนูตัวอย่าง 6 อย่างสำหรับมื้ออาหารในวันทำงาน</p></div><img data-mascot="thinking" alt="น้อง HELM กำลังคิดเมนู"></div>
- <section class="wheel-stage ${wheelSpinning?"is-spinning":wheelResultIndex>=0?"is-finished":""}" aria-label="วงล้อสุ่มเมนูอาหาร"><div class="wheel-host"><div class="wheel-host-copy"><span class="wheel-kicker">✨ ไอเดียมื้ออร่อย</span><h2 class="wheel-stage-title">หมุนเลย มื้อนี้กินอะไรดี?</h2></div></div><div class="wheel-wrap"><span class="wheel-choice-halo" aria-hidden="true"></span><div class="wheel-mascot"><img data-mascot="wheel" alt="น้อง HELM ชี้นิ้วเลือกเมนูบนวงล้อ"></div><div id="roulette-wheel" class="roulette-wheel" style="--label-counter:${-wheelRotation}deg;transform:rotate(${wheelRotation}deg)" role="img" aria-label="วงล้อมีเมนูอาหารหกอย่าง">${WHEEL_MEALS.map((m,i)=>`<span class="wheel-slice ${i===0||i===5?"":"dark-text"}" style="left:${WHEEL_POSITIONS[i][0]}%;top:${WHEEL_POSITIONS[i][1]}%"><span class="food-emoji" aria-hidden="true">${m.emoji}</span><span class="food-name">${esc(m.name)}</span></span>`).join("")}</div></div><button id="wheel-spin" class="wheel-spin" data-action="spin-wheel" ${wheelSpinning?"disabled":""}>${wheelSpinning?"กำลังหมุน…":wheelResultIndex>=0?"หมุนอีกครั้ง":"ให้น้อง HELM หมุน 🎲"}</button><span id="wheel-status" class="sr-only" aria-live="polite">${wheelSpinning?"กำลังหมุนวงล้อ":""}</span></section>
+ <section class="wheel-stage ${wheelSpinning?"is-spinning":wheelResultIndex>=0?"is-finished":""}" aria-label="วงล้อสุ่มเมนูอาหาร"><div class="wheel-host"><div class="wheel-host-copy"><span class="wheel-kicker">✨ ไอเดียมื้ออร่อย</span><h2 class="wheel-stage-title">หมุนเลย มื้อนี้กินอะไรดี?</h2></div></div><div class="wheel-wrap"><span class="wheel-choice-halo" aria-hidden="true"></span><div class="wheel-mascot"><img data-mascot="wheel" alt="น้อง HELM ชี้นิ้วเลือกเมนูบนวงล้อ"></div><div id="roulette-wheel" class="roulette-wheel" style="--label-counter:${-wheelRotation}deg;transform:rotate(${wheelRotation}deg)" role="img" aria-label="วงล้อมีเมนูอาหารหกอย่าง">${WHEEL_MEALS.map((m,i)=>`<span class="wheel-slice ${i===0||i===5?"":"dark-text"}" style="left:${WHEEL_POSITIONS[i][0]}%;top:${WHEEL_POSITIONS[i][1]}%"><span class="food-emoji" aria-hidden="true">${esc(m.emoji)}</span><span class="food-name">${esc(m.name)}</span></span>`).join("")}</div></div><button id="wheel-spin" class="wheel-spin" data-action="spin-wheel" ${wheelSpinning?"disabled":""}>${wheelSpinning?"กำลังหมุน…":wheelResultIndex>=0?"หมุนอีกครั้ง":"ให้น้อง HELM หมุน 🎲"}</button><span id="wheel-status" class="sr-only" aria-live="polite">${wheelSpinning?"กำลังหมุนวงล้อ":""}</span></section>
  <section id="wheel-result" class="wheel-result" aria-live="polite" ${wheelResultIndex<0?"hidden":""}>${wheelResultHTML()}</section><p class="wheel-note">วงล้อสุ่มเพื่อช่วยคิดเมนู ไม่ได้เลือกตามโรคประจำตัวหรือข้อจำกัดอาหารของคุณ • พลังงานเป็นค่าประมาณจากรายการตัวอย่าง</p></div>`}
 document.addEventListener("click",e=>{const button=e.target.closest("[data-action]");if(!button)return;
  if(button.dataset.action==="review-camera"){$("#photo-input").click();return}
@@ -1282,6 +1282,24 @@ document.addEventListener("submit", async event => {
 // integration files so they can be restored without rebuilding them.
 const SPRINT_TABS = new Set(["today", "wheel", "review"]);
 
+// GitHub Pages serves the published menu list to every visitor. Editing the
+// list is done in admin.html; only a GitHub commit changes the shared wheel.
+fetch("menus.json", { cache: "no-store" }).then(response => {
+  if (!response.ok) throw new Error("Menu list unavailable");
+  return response.json();
+}).then(data => {
+  if (!Array.isArray(data.meals) || data.meals.length !== 6) throw new Error("Invalid menu count");
+  const meals = data.meals.map(meal => ({
+    name: String(meal.name || "").trim(),
+    emoji: String(meal.emoji || "🍽️").trim(),
+    items: []
+  }));
+  if (meals.some(meal => !meal.name || meal.name.length > 32 || meal.emoji.length > 12)) throw new Error("Invalid menu entry");
+  WHEEL_MEALS.splice(0, WHEEL_MEALS.length, ...meals);
+  wheelResultIndex = -1;
+  if (state.tab === "wheel") render();
+}).catch(error => console.warn("Using built-in wheel menus:", error.message));
+
 navHTML = function () {
   return [
     ["today", "camera", "สแกนอาหาร"],
@@ -1314,7 +1332,7 @@ home = function () {
 wheelResultHTML = function () {
   if (wheelResultIndex < 0) return "";
   const meal = WHEEL_MEALS[wheelResultIndex];
-  return `<div class="wheel-result-heading"><img class="mascot-win" data-mascot="thumbs" alt="น้อง HELM ยกนิ้วให้"><div><span class="eyebrow">ผลที่สุ่มได้ ${meal.emoji} ✨</span><h2>${esc(meal.name)}</h2></div></div>
+  return `<div class="wheel-result-heading"><img class="mascot-win" data-mascot="thumbs" alt="น้อง HELM ยกนิ้วให้"><div><span class="eyebrow">ผลที่สุ่มได้ ${esc(meal.emoji)} ✨</span><h2>${esc(meal.name)}</h2></div></div>
     <p>เมนูที่สุ่มเป็นไอเดียอาหาร พลังงานจริงขึ้นกับสูตรและปริมาณ</p>
     <div class="wheel-result-actions"><button class="solid-button" data-action="scan">${icon("camera")} ซื้อแล้วสแกนอาหาร</button>
     <button class="ghost-button" data-action="spin-wheel">หมุนอีกครั้ง</button></div>`;

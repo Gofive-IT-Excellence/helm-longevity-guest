@@ -10,6 +10,8 @@ ai = (root / "ai-integration.js").read_text(encoding="utf-8")
 ai_style = (root / "ai-integration.css").read_text(encoding="utf-8")
 trainer = (root / "trainer-integration.js").read_text(encoding="utf-8")
 trainer_style = (root / "trainer.css").read_text(encoding="utf-8")
+focus = (root / "sprint-focus.js").read_text(encoding="utf-8")
+focus_style = (root / "sprint-focus.css").read_text(encoding="utf-8")
 
 # The source also contains a public-preview-only login overlay. The intranet
 # uses its own authenticated login, so remove that overlay and its render hooks.
@@ -43,7 +45,7 @@ replace_once('state.photo=withSample?MEAL:null;', 'state.photo=null;')
 replace_once('state.photo=MEAL;render()', 'state.photo=null;render()')
 source = source.replace('alt="ภาพอาหารล่าสุด"', 'alt="ภาพประกอบอาหารหรือภาพอาหารล่าสุด"')
 source = source.replace('ค่าตัวอย่างจากอาหารที่บันทึก แก้ไขแต่ละวัตถุดิบได้', 'ค่าโดยประมาณจากอาหารที่บันทึก แก้ไขแต่ละวัตถุดิบได้')
-replace_once("render();\n</script>", client + "\n" + ai + "\n" + trainer + "\nbootstrap();\n</script>")
+replace_once("render();\n</script>", client + "\n" + ai + "\n" + trainer + "\n" + focus + "\nbootstrap();\n</script>")
 source = source.replace("30 ก.ย. 2569", '<span class="today-date"></span>')
 source = source.replace("ข้อมูลทั้งหมดในไฟล์นี้อยู่บนเครื่องของคุณ", "ข้อมูลส่วนตัวอยู่ในเบราว์เซอร์เครื่องนี้")
 source = source.replace("เก็บในเบราว์เซอร์เครื่องนี้", "เก็บในเบราว์เซอร์เครื่องนี้")
@@ -85,7 +87,7 @@ body.authenticated .auth-root{display:none}
 .preview-label{display:inline-block;margin-left:8px;padding:5px 9px;border-radius:999px;background:#e8f4ff;color:#0868c9;font-size:11px;font-weight:700;white-space:nowrap}
 .preview-mode .ai-photo-button:disabled,.preview-mode .ai-assist button:disabled{opacity:.6;cursor:not-allowed}
 """
-replace_once("</style>", auth_style + ai_style + trainer_style + "\n</style>")
+replace_once("</style>", auth_style + ai_style + trainer_style + focus_style + "\n</style>")
 replace_once("<script>", '<script src="config.js"></script>\n<script>')
 source = source.replace("font-weight:750", "font-weight:400").replace("font-weight:800", "font-weight:400")
 replace_once('<div class="shell">', '<div id="auth-root" class="auth-root"><div class="auth-card">กำลังตรวจสอบการเข้าสู่ระบบ...</div></div>\n<div class="shell">')

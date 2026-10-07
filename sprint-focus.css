@@ -1,0 +1,33 @@
+/* Only the food scan and menu wheel are surfaced in this sprint. */
+.side-nav,.bottom-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sprint-home{display:grid;gap:22px}
+.sprint-primary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:32px;border:1px solid #bcdcff;border-radius:28px;background:linear-gradient(125deg,#e8f5ff,#f8fcff 70%);box-shadow:0 14px 34px #116bd010}
+.sprint-primary-copy{min-width:0;max-width:660px}
+.sprint-primary h2{margin:8px 0;font-size:clamp(26px,4vw,42px);line-height:1.2;color:#123a75}
+.sprint-primary p{margin:0 0 22px;color:#6c83a5;line-height:1.55}
+.sprint-primary img{width:min(30%,220px);height:auto;object-fit:contain}
+.sprint-actions{display:flex;flex-wrap:wrap;gap:12px}
+.sprint-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px}
+.sprint-wheel-link{display:flex;align-items:center;gap:16px;width:100%;min-height:100px;padding:20px;border:1px solid #d2e6fb;border-radius:24px;background:#fff;color:#1264c9;text-align:left;cursor:pointer}
+.sprint-wheel-link>span:nth-child(2){display:grid;gap:4px;flex:1}
+.sprint-wheel-link strong{font-size:22px;color:#173b72}
+.sprint-wheel-link small{font-size:14px;color:#738aab}
+.sprint-wheel-icon{display:grid;place-items:center;width:56px;height:56px;border-radius:17px;background:#e6f4ff}
+.sprint-wheel-link>svg{width:22px}
+.sprint-disclaimer{margin:0;color:#8194af;font-size:13px;line-height:1.5}
+.topbar-right .shift-pill,.mobile-brand .shift-pill{display:none}
+@media(max-width:760px){
+  .bottom-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sprint-home{gap:16px}
+  .sprint-primary{padding:22px 18px;align-items:flex-start;border-radius:22px}
+  .sprint-primary img{width:80px;max-height:100px}
+  .sprint-primary h2{font-size:26px}
+  .sprint-primary p{font-size:14px}
+  .sprint-actions{display:grid;grid-template-columns:1fr 1fr}
+  .sprint-actions button{min-width:0;padding:10px 8px;font-size:13px}
+  .sprint-actions button svg{width:18px;height:18px}
+  .sprint-wheel-link{min-height:86px;padding:16px}
+  .sprint-wheel-link strong{font-size:18px}
+  .sprint-wheel-link small{font-size:12px}
+}
+@media(max-width:390px){.sprint-primary img{display:none}}

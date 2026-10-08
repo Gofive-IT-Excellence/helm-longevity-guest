@@ -12,7 +12,9 @@
 
 ## จัดการเมนูวงล้อ
 
-เปิด `admin.html` บน GitHub Pages เพื่อแก้ชื่ออาหารและไอคอนของวงล้อ 6 ช่อง หน้านี้แสดงตัวอย่างและส่งออก `menus.json` ให้คัดลอกหรือดาวน์โหลด จากนั้นผู้ที่มีสิทธิ์เขียน repository ต้องแก้ `menus.json` บน GitHub และ Commit เพื่อเผยแพร่ให้ทุกคนเห็น หน้าแอดมินเป็นหน้าสาธารณะสำหรับเตรียมข้อมูลเท่านั้น; สิทธิ์เผยแพร่บังคับโดยบัญชี GitHub ไม่มีรหัสแอดมินหรือ token อยู่ในหน้าเว็บ
+เปิด `admin.html` เพื่อแก้ชื่ออาหารและไอคอนของวงล้อ 6 ช่อง แล้วกด **เผยแพร่เมนูขึ้นเว็บ** หน้านี้เรียก GitHub Contents API เพื่อ commit เฉพาะ `menus.json` ไปที่ `main` ด้วย Fine-grained personal access token ที่ผู้เผยแพร่วางในช่องขณะใช้งาน กำหนด token ให้เข้าถึงเฉพาะ repository `helm-longevity-guest` ด้วยสิทธิ์ Contents: Read and write และกำหนดวันหมดอายุสั้น ๆ Token ไม่ถูกบันทึกใน localStorage หรือไฟล์เว็บ และถูกล้างหลังเผยแพร่สำเร็จ หน้าเว็บทั่วไปไม่ต้องใช้ token
+
+Coolify ต้องมี GitHub manual push webhook ที่เซ็นด้วย secret จึงจะ Deploy commit ใหม่โดยอัตโนมัติ การตั้งค่า Auto deploy อย่างเดียวไม่เพียงพอสำหรับ Public GitHub Repository หากยังไม่ได้ตั้ง webhook ผู้เผยแพร่ต้องกด Deploy ใน Coolify หลัง commit
 
 ## พัฒนาในเครื่อง
 

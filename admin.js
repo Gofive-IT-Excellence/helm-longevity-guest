@@ -10,6 +10,9 @@ const fallback = {version: 1, meals: [
 ]};
 const repository = "Gofive-IT-Excellence/helm-longevity-guest";
 const apiUrl = `https://api.github.com/repos/${repository}/contents/menus.json`;
+const publishedMenuUrl = location.hostname === "helmlongevity.go5.online"
+  ? "https://gofive-it-excellence.github.io/helm-longevity-guest/menus.json"
+  : "menus.json";
 const list = document.getElementById("menu-list");
 const preview = document.getElementById("preview");
 const status = document.getElementById("status");
@@ -153,7 +156,7 @@ async function publish() {
     loadedMeals = JSON.parse(json).meals;
     tokenInput.value = "";
     const commitUrl = result.commit?.html_url || "";
-    setStatus("บันทึกเมนูบน GitHub แล้ว รอ Coolify Deploy แล้วรีเฟรชหน้าเว็บ", false, commitUrl);
+    setStatus("บันทึกเมนูบน GitHub แล้ว รอ GitHub Pages เผยแพร่สักครู่ จากนั้นรีเฟรชหน้าเว็บ", false, commitUrl);
   } catch (error) {
     setStatus(error instanceof Error ? error.message : "เผยแพร่ไม่สำเร็จ กรุณาลองใหม่", true);
   } finally {
@@ -183,7 +186,7 @@ document.getElementById("download").addEventListener("click", () => {
   setStatus("ดาวน์โหลดแล้ว นำข้อมูลไปแทนที่ menus.json บน GitHub ได้");
 });
 publishButton.addEventListener("click", publish);
-fetch("menus.json", {cache: "no-store"})
+fetch(`${publishedMenuUrl}?v=${Math.floor(Date.now() / 60000)}`, {cache: "no-store"})
   .then(response => { if (!response.ok) throw new Error(); return response.json(); })
   .then(data => {
     if (!Array.isArray(data.meals) || data.meals.length !== 6) throw new Error();

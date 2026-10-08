@@ -14,7 +14,7 @@
 
 เปิด `admin.html` เพื่อแก้ชื่ออาหารและไอคอนของวงล้อ 6 ช่อง แล้วกด **เผยแพร่เมนูขึ้นเว็บ** หน้านี้เรียก GitHub Contents API เพื่อ commit เฉพาะ `menus.json` ไปที่ `main` ด้วย Fine-grained personal access token ที่ผู้เผยแพร่วางในช่องขณะใช้งาน กำหนด token ให้เข้าถึงเฉพาะ repository `helm-longevity-guest` ด้วยสิทธิ์ Contents: Read and write และกำหนดวันหมดอายุสั้น ๆ Token ไม่ถูกบันทึกใน localStorage หรือไฟล์เว็บ และถูกล้างหลังเผยแพร่สำเร็จ หน้าเว็บทั่วไปไม่ต้องใช้ token
 
-Coolify ต้องมี GitHub manual push webhook ที่เซ็นด้วย secret จึงจะ Deploy commit ใหม่โดยอัตโนมัติ การตั้งค่า Auto deploy อย่างเดียวไม่เพียงพอสำหรับ Public GitHub Repository หากยังไม่ได้ตั้ง webhook ผู้เผยแพร่ต้องกด Deploy ใน Coolify หลัง commit
+เว็บบริษัทดึง `menus.json` จาก GitHub Pages โดยตรง (GitHub Pages อนุญาต CORS) หลัง commit แล้วรอ GitHub Pages เผยแพร่และรีเฟรชหน้าเว็บได้เลย ไม่ต้อง Deploy Coolify ซ้ำสำหรับการเปลี่ยนเมนู โปรดรอให้ GitHub Pages และแคชอัปเดต ซึ่งอาจใช้เวลาหลายนาที
 
 ## พัฒนาในเครื่อง
 

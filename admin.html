@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.github.com; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.github.com https://gofive-it-excellence.github.io; base-uri 'none'; form-action 'none'">
   <title>จัดการเมนูวงล้อ • HELM Longevity</title>
   <style>
     :root{font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;color:#153a70;background:#f3f8ff}
@@ -53,7 +53,7 @@
         </form>
       </section>
       <section class="steps"><h2>ตั้งค่าครั้งแรก</h2><ol><li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">สร้าง Fine-grained personal access token บน GitHub</a> เลือกเจ้าของ repository และเลือกเฉพาะ <strong>helm-longevity-guest</strong></li><li>ตั้งค่า <strong>Contents: Read and write</strong> และกำหนดวันหมดอายุสั้น ๆ จากนั้นวาง token ในช่องด้านบน</li><li>แก้เมนูแล้วกด <strong>เผยแพร่เมนูขึ้นเว็บ</strong> ระบบจะบันทึกไฟล์ <strong>menus.json</strong> บน GitHub</li></ol></section>
-      <p class="notice">หน้าเว็บทั่วไปไม่ต้องใช้ token เมนูจะเปลี่ยนสำหรับทุกคนหลัง Coolify Deploy commit ใหม่ การแก้ในฟอร์มก่อนกดเผยแพร่ยังไม่เปลี่ยนเมนูของผู้อื่น</p>
+      <p class="notice">หน้าเว็บทั่วไปไม่ต้องใช้ token หลังบันทึก GitHub Pages จะเผยแพร่เมนูใหม่โดยอัตโนมัติ การแก้ในฟอร์มก่อนกดเผยแพร่ยังไม่เปลี่ยนเมนูของผู้อื่น</p>
     </main>
   </div>
   <script src="admin.js"></script>

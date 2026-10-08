@@ -1289,9 +1289,12 @@ document.addEventListener("submit", async event => {
 // integration files so they can be restored without rebuilding them.
 const SPRINT_TABS = new Set(["today", "wheel", "review"]);
 
-// GitHub Pages serves the published menu list to every visitor. Editing the
-// list is done in admin.html; only a GitHub commit changes the shared wheel.
-fetch("menus.json", { cache: "no-store" }).then(response => {
+// The company site reads the menu from GitHub Pages. A menu commit can then
+// update the wheel without rebuilding the Coolify application.
+const publishedMenuUrl = location.hostname === "helmlongevity.go5.online"
+  ? "https://gofive-it-excellence.github.io/helm-longevity-guest/menus.json"
+  : "menus.json";
+fetch(`${publishedMenuUrl}?v=${Math.floor(Date.now() / 60000)}`, { cache: "no-store" }).then(response => {
   if (!response.ok) throw new Error("Menu list unavailable");
   return response.json();
 }).then(data => {

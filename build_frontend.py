@@ -89,7 +89,7 @@ body.authenticated .auth-root{display:none}
 .preview-mode .ai-photo-button:disabled,.preview-mode .ai-assist button:disabled{opacity:.6;cursor:not-allowed}
 """
 replace_once("</style>", auth_style + ai_style + trainer_style + focus_style + "\n</style>")
-replace_once("<script>", '<script src="config.js"></script>\n<script>')
+replace_once("<script>", '<script src="config.js?v=20261008-1"></script>\n<script>')
 source = source.replace("font-weight:750", "font-weight:400").replace("font-weight:800", "font-weight:400")
 replace_once('<div class="shell">', '<div id="auth-root" class="auth-root"><div class="auth-card">กำลังตรวจสอบการเข้าสู่ระบบ...</div></div>\n<div class="shell">')
 

@@ -64,6 +64,7 @@ for (const exercise of HELM_EXERCISES) {
 
 const HELM_EXERCISE_SETS = {
   gentle:{label:"เริ่มแบบเบา ๆ",ids:["0659","1373","3013"]},
+  belly:{label:"ลดพุงและฝึกแกนกลาง",ids:["3239","0003","1685"]},
   lower:{label:"เน้นขาและสะโพก",ids:["1685","1373","1460"]},
   upper:{label:"เน้นแขนและอก",ids:["0659","0493","0294"]},
   core:{label:"เน้นแกนกลาง",ids:["3679","0003","3239"]},
@@ -71,9 +72,14 @@ const HELM_EXERCISE_SETS = {
   noGear:{label:"ไม่ใช้อุปกรณ์",ids:["1685","0659","3013"]}
 };
 
+function isBellyFatQuestion(query) {
+  return /(ลดพุง|ลดไขมันหน้าท้อง|ลดหน้าท้อง|ลดไขมันที่ท้อง|พุงยุบ|หน้าท้องแบน|ลดรอบเอว|ลดเอว)/.test(String(query || "").toLowerCase());
+}
+
 function chooseExerciseSet(query) {
   const text=String(query||"").toLowerCase();
   if (/(เจ็บ|ปวด|บาดเจ็บ|ตั้งครรภ์|โรค|ผ่าตัด|เวียนหัว|หน้ามืด|อาการ|ฟื้นฟู)/.test(text)) return null;
+  if (isBellyFatQuestion(text)) return "belly";
   if (!/(ท่า|ออกกำลัง|ออกกําลัง|ออกกำลังกาย|exercise|workout|ยืดเหยียด|เวท|กล้าม|ซิตอัพ|วิดพื้น|แพลงก์|ดึงข้อ|ดัมเบล|จักรยาน|เอนตัวด้านข้าง|side bend|air bike|sit.up|push.up)/.test(text)) return null;
   if (!/(ขอ|แนะนำ|ส่ง|อยาก|หา|มี|ตัวอย่าง|ช่วย|ท่า|กล้าม|ซิตอัพ|วิดพื้น|แพลงก์|ดึงข้อ|ดัมเบล|จักรยาน|เอนตัวด้านข้าง|side bend|air bike|exercise|workout|sit.up|push.up)/.test(text)) return null;
   if (/(ดัมเบล|แขน|หน้าอก|ไหล่|upper|arm|chest)/.test(text)) return "upper";

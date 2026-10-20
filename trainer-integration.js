@@ -6,6 +6,7 @@ let trainerBusy = false;
 let trainerEpoch = 0;
 let trainerPendingPhoto = "";
 let trainerPhotoLoading = false;
+let trainerScrollRequest = 0;
 const originalRender = render;
 const originalLoadApp = loadApp;
 loadApp = async function (username) {
@@ -99,13 +100,27 @@ function trainerIllustrationsForQuestion(question) {
   return ["0294", "0662", "0659"];
 }
 
+function trainerScrollToBottom() {
+  const request = ++trainerScrollRequest;
+  const scroll = () => {
+    if (request !== trainerScrollRequest || state.tab !== "trainer") return;
+    const page = document.scrollingElement || document.documentElement;
+    page.scrollTop = page.scrollHeight;
+  };
+  requestAnimationFrame(scroll);
+  // Mobile keyboards and the bottom bar can resize the viewport after rendering.
+  setTimeout(scroll, 120);
+  setTimeout(scroll, 360);
+}
+
 function trainerSuggestExercises(setKey, singleId, previousIds, showImage = false) {
   const selected = HELM_EXERCISE_SETS[setKey] || HELM_EXERCISE_SETS.gentle;
   const exercises = singleId ? [singleId] : previousIds || selected.ids;
-  trainerMessages.push({role:"assistant",content:showImage ? "ภาพเคลื่อนไหวสาธิตท่าอยู่ด้านล่างครับ" : previousIds ? "ท่าที่ส่งให้ก่อนหน้าใช้กล้ามเนื้อส่วนนี้ครับ" : singleId ? "ท่านี้ใช้กล้ามเนื้อส่วนไหน และทำอย่างไร" : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises});
+  const bellyAnswer = "ถ้าอยาก **ลดพุง** ให้เน้นกิจกรรมที่ช่วยลดไขมันโดยรวมร่วมกับการฝึกกล้ามเนื้อครับ ท่าหน้าท้องช่วยให้แกนกลางแข็งแรง แต่เล่นท่าท้องอย่างเดียวไม่พอให้ไขมันหน้าท้องลด\n\nเริ่มแบบนี้ได้ครับ:\n- เดินเร็วตามกำลัง แล้วค่อย ๆ เพิ่มเวลาจนรวมราว 150 นาทีต่อสัปดาห์\n- ฝึกกล้ามเนื้ออย่างน้อย 2 วันต่อสัปดาห์: แพลงก์คุกเข่าแตะไหล่และปั่นจักรยานกลางอากาศช่วยฝึกแกนกลาง ส่วนท่าย่อตัวแล้วเหยียดแขนช่วยฝึกกล้ามเนื้อหลายส่วน\n- พักระหว่างวันฝึก และดูแลอาหารควบคู่กัน";
+  trainerMessages.push({role:"assistant",content:showImage ? "ภาพเคลื่อนไหวสาธิตท่าอยู่ด้านล่างครับ" : previousIds ? "ท่าที่ส่งให้ก่อนหน้าใช้กล้ามเนื้อส่วนนี้ครับ" : singleId ? "ท่านี้ใช้กล้ามเนื้อส่วนไหน และทำอย่างไร" : setKey === "belly" ? bellyAnswer : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises});
   if (state.tab === "trainer") {
     render();
-    document.querySelector("#trainer-chat .trainer-message:last-child")?.scrollIntoView({block:"start"});
+    trainerScrollToBottom();
   }
 }
 
@@ -207,15 +222,16 @@ document.addEventListener("submit", async event => {
   trainerMessages.push({role: "user", content: text, photo});
   trainerPendingPhoto = "";
   const lowerText = text.toLowerCase();
+  const bellyGoal = !photo && isBellyFatQuestion(text);
   const illustrationIds = photo ? null : trainerIllustrationsForQuestion(text);
-  const namedExercise = !photo && findNamedExercise(text);
+  const namedExercise = !photo && !bellyGoal && findNamedExercise(text);
   const refersToPrevious = /(ท่านี้|ท่านั้น|ท่าที่ส่ง|ท่าข้างต้น|ท่าก่อนหน้า|ท่าเมื่อกี้|ภาพท่า|รูปท่า|ภาพของท่า|รูปของท่า)/.test(lowerText);
   const asksForImage = /(ภาพ|รูป|gif|คลิป|เคลื่อนไหว|ดูท่า)/.test(lowerText);
   const priorExercises = !photo && !namedExercise && refersToPrevious && /(กล้าม|ส่วนไหน|บริเวณไหน|ตรงไหน|ประโยชน์|ได้อะไร|ทำอย่างไร|ทำยังไง|ภาพ|รูป|gif|คลิป|เคลื่อนไหว|ดูท่า)/.test(lowerText)
     ? [...trainerMessages].reverse().find(message => message.exercises)?.exercises : null;
   const asksForExercises = /(ขอ|แนะนำ|ส่ง|อยาก|ช่วยเลือก|หา|มีท่า|ท่าอะไร|ท่าไหน|ตัวอย่าง)/.test(lowerText);
   const asksAboutExercise = /(ใช้กล้าม|กล้ามเนื้ออะไร|ได้กล้าม|ทำอย่างไร|ทำยังไง)/.test(lowerText);
-  const requestedSet = !photo && !refersToPrevious && !asksAboutExercise && asksForExercises && chooseExerciseSet(text);
+  const requestedSet = !photo && !refersToPrevious && (bellyGoal || (!asksAboutExercise && asksForExercises)) && chooseExerciseSet(text);
   if (namedExercise || priorExercises || requestedSet) {
     trainerSuggestExercises(requestedSet, namedExercise?.id, priorExercises, asksForImage);
     return;
@@ -223,6 +239,7 @@ document.addEventListener("submit", async event => {
   const epoch = trainerEpoch;
   trainerBusy = true;
   render();
+  trainerScrollToBottom();
   try {
     const history = trainerMessages.filter(item => item.role === "user" || item.role === "assistant")
       .slice(-12).map(item => ({role: item.role, content: item.role === "assistant" ? item.content.slice(0, 12000) : item.content}));
@@ -243,7 +260,7 @@ document.addEventListener("submit", async event => {
     trainerBusy = false;
     if (state.tab === "trainer") {
       render();
-      window.scrollTo(0, document.documentElement.scrollHeight);
+      trainerScrollToBottom();
     }
   }
 });

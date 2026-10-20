@@ -78,13 +78,14 @@ function trainerExerciseCards(ids) {
   return `<div class="trainer-exercise-list">${ids.map(id => {
     const item = HELM_EXERCISES.find(exercise => exercise.id === id);
     if (!item) return "";
-    return `<article class="trainer-exercise-card"><div class="trainer-exercise-head"><div><span class="trainer-exercise-kicker">ท่า ${esc(item.id)} · ${esc(item.level)}</span><h3>${esc(item.name)}</h3><span class="trainer-exercise-english">${esc(item.english)}</span></div><span class="trainer-exercise-dose">${esc(item.dose)}</span></div><p class="trainer-exercise-equipment">อุปกรณ์: ${esc(item.equipment)}</p><ol>${item.steps.map(step => `<li>${esc(step)}</li>`).join("")}</ol></article>`;
+    return `<article class="trainer-exercise-card">${trainerMotionSvg(item)}<div class="trainer-exercise-head"><div><span class="trainer-exercise-kicker">ท่า ${esc(item.id)} · ${esc(item.level)}</span><h3>${esc(item.name)}</h3><span class="trainer-exercise-english">${esc(item.english)}</span></div><span class="trainer-exercise-dose">${esc(item.dose)}</span></div><div class="trainer-exercise-muscles"><span><strong>กล้ามเนื้อหลัก:</strong> ${esc(item.primary)}</span><span><strong>ช่วยทำงาน:</strong> ${esc(item.secondary)}</span></div><p class="trainer-exercise-benefit">${esc(item.benefit)}</p><p class="trainer-exercise-equipment">อุปกรณ์: ${esc(item.equipment)}</p><ol>${item.steps.map(step => `<li>${esc(step)}</li>`).join("")}</ol></article>`;
   }).join("")}</div>`;
 }
 
-function trainerSuggestExercises(setKey, singleId) {
+function trainerSuggestExercises(setKey, singleId, previousIds) {
   const selected = HELM_EXERCISE_SETS[setKey] || HELM_EXERCISE_SETS.gentle;
-  trainerMessages.push({role:"assistant",content:singleId ? "วิธีทำท่านี้แบบสั้น ๆ" : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises:singleId ? [singleId] : selected.ids});
+  const exercises = singleId ? [singleId] : previousIds || selected.ids;
+  trainerMessages.push({role:"assistant",content:previousIds ? "ท่าที่ส่งให้ก่อนหน้าใช้กล้ามเนื้อส่วนนี้ครับ" : singleId ? "ท่านี้ใช้กล้ามเนื้อส่วนไหน และทำอย่างไร" : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises});
   if (state.tab === "trainer") {
     render();
     window.scrollTo(0, document.documentElement.scrollHeight);
@@ -99,7 +100,7 @@ function trainerPage() {
       `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) + (message.exercises ? trainerExerciseCards(message.exercises) : "") : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ…</p></div>' : ""}</div>
     ${trainerPendingPhoto ? `<div class="trainer-photo-preview"><img src="${esc(trainerPendingPhoto)}" alt="รูปอาหารที่จะแนบ"><span>รูปอาหารพร้อมส่ง</span><button type="button" data-action="trainer-remove-photo" aria-label="ลบรูปที่แนบ">×</button></div>` : ""}
     <form id="trainer-form" class="trainer-compose"><button class="trainer-attach" type="button" data-action="trainer-camera" aria-label="ถ่ายรูปอาหาร" title="ถ่ายรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("camera")}</button><button class="trainer-attach" type="button" data-action="trainer-gallery" aria-label="เลือกรูปอาหาร" title="เลือกรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("upload")}</button><input name="message" type="text" maxlength="1000" autocomplete="off" aria-label="พิมพ์คำถามถึง AI เทรนเนอร์" placeholder="${previewMode ? "โหมดทดลองยังไม่เชื่อม HELM AI" : "ถาม HELM หรือแนบรูปอาหาร…"}" ${previewMode ? "disabled" : ""}><button class="trainer-send" type="submit" aria-label="ส่งข้อความ" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("send")}</button><input id="trainer-camera-input" class="trainer-file-input" type="file" accept="image/*" capture="environment" aria-label="ถ่ายรูปอาหาร"><input id="trainer-gallery-input" class="trainer-file-input" type="file" accept="image/*" aria-label="เลือกรูปอาหาร"></form>
-    <p class="trainer-note">ท่าออกกำลังกายอ้างอิงข้อมูลจาก <a href="https://github.com/hasaneyldrm/exercises-dataset" target="_blank" rel="noopener noreferrer">Exercises Dataset</a> (© Hasan Emir Yıldırım, MIT) • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม</p>
+    <p class="trainer-note">ข้อมูลท่าอ้างอิงจาก <a href="https://github.com/hasaneyldrm/exercises-dataset" target="_blank" rel="noopener noreferrer">Exercises Dataset</a> (© Hasan Emir Yıldırım, MIT) • ภาพเคลื่อนไหววาดขึ้นใหม่ • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม</p>
   </div>`;
 }
 
@@ -180,8 +181,10 @@ document.addEventListener("submit", async event => {
   const requestedSet = !photo && chooseExerciseSet(text);
   if (requestedSet) {
     const lowerText = text.toLowerCase();
-    const namedExercise = HELM_EXERCISES.find(exercise => lowerText.includes(exercise.name.toLowerCase()) || lowerText.includes(exercise.english));
-    trainerSuggestExercises(requestedSet, namedExercise?.id);
+    const namedExercise = HELM_EXERCISES.find(exercise => [exercise.name,exercise.english,...(exercise.aliases || [])].some(name => lowerText.includes(name.toLowerCase())));
+    const priorExercises = !namedExercise && /(กล้าม|ส่วนไหน|บริเวณไหน|ตรงไหน|ประโยชน์|ได้อะไร)/.test(lowerText)
+      ? [...trainerMessages].reverse().find(message => message.exercises)?.exercises : null;
+    trainerSuggestExercises(requestedSet, namedExercise?.id, priorExercises);
     return;
   }
   const epoch = trainerEpoch;

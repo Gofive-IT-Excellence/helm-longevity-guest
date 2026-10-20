@@ -2,6 +2,7 @@
 // https://github.com/hasaneyldrm/exercises-dataset (© 2026 Hasan Emir Yıldırım).
 // The source repository's images/GIFs have a separate license and are not used.
 const HELM_EXERCISES = [
+  {id:"0001",name:"ซิตอัพ 3/4",english:"3/4 sit-up",aliases:["ซิตอัพ","sit-up","sit up"],group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"5–8 ครั้ง",steps:["นอนหงาย ชันเข่า วางเท้าราบกับพื้น แล้ววางมือเบา ๆ หลังศีรษะโดยไม่ดึงคอ","เกร็งหน้าท้อง ยกลำตัวส่วนบนขึ้นช้า ๆ จนประมาณ 45 องศา หายใจออกขณะยก","หยุดสั้น ๆ แล้วลดตัวลงช้า ๆ โดยไม่กระแทกหลัง"]},
   {id:"0659",name:"วิดพื้นกับกำแพง",english:"push-up (wall)",group:"upper",level:"เริ่มต้น",equipment:"กำแพง",dose:"6–10 ครั้ง",steps:["ยืนหันหน้าเข้ากำแพง ห่างประมาณหนึ่งช่วงแขน วางมือสูงระดับไหล่และกว้างกว่าไหล่เล็กน้อย","ถอยเท้าให้ลำตัวตรง เกร็งหน้าท้อง แล้วงอศอกพาหน้าอกเข้าหากำแพง","ดันกลับช้า ๆ จนแขนเหยียด โดยคงลำตัวเป็นแนวตรง"]},
   {id:"1685",name:"ย่อตัวแล้วเหยียดแขนเหนือศีรษะ",english:"squat to overhead reach",group:"lower",level:"เริ่มต้น",equipment:"ไม่ใช้อุปกรณ์",dose:"6–10 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ปลายเท้าชี้ออกเล็กน้อย","งอเข่าและดันสะโพกไปด้านหลังเพื่อย่อตัวเท่าที่ควบคุมได้","ยืนขึ้นพร้อมเหยียดแขนเหนือศีรษะ แล้วลดแขนลงก่อนเริ่มครั้งถัดไป"]},
   {id:"1373",name:"ยืนเขย่งปลายเท้า",english:"bodyweight standing calf raise",group:"lower",level:"เริ่มต้น",equipment:"กำแพงหรือที่จับมั่นคง",dose:"8–12 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ใช้มือแตะกำแพงหรือที่จับเพื่อทรงตัว","ยกส้นเท้าขึ้นช้า ๆ ให้น้ำหนักอยู่บนปลายเท้า","หยุดสั้น ๆ แล้วลดส้นเท้าลงอย่างควบคุม"]},
@@ -16,19 +17,36 @@ const HELM_EXERCISES = [
   {id:"0464",name:"แพลงก์หมุนลำตัว",english:"front plank with twist",group:"core",level:"ท้าทาย",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 4–6 ครั้ง",steps:["เริ่มในท่าแพลงก์แขนเหยียด มืออยู่ใต้หัวไหล่","เกร็งหน้าท้องและสะโพก แล้วหมุนลำตัวพร้อมยกแขนข้างหนึ่งขึ้น","กลับท่าเริ่มต้นช้า ๆ แล้วสลับอีกข้าง"]}
 ];
 
+const HELM_EXERCISE_MUSCLES = {
+  "0001":{primary:"กล้ามท้องด้านหน้า",secondary:"กล้ามเนื้องอสะโพก",benefit:"ฝึกการงอลำตัวและควบคุมแกนกลาง",highlight:["core"]},
+  "0659":{primary:"หน้าอกและหลังแขน",secondary:"หัวไหล่ด้านหน้าและแกนกลาง",benefit:"ฝึกแรงดันช่วงบนในระดับเริ่มต้น",highlight:["arms","core"]},
+  "1685":{primary:"ต้นขาด้านหน้าและกล้ามก้น",secondary:"ต้นขาด้านหลังและแกนกลาง",benefit:"ฝึกการย่อตัว ลุกขึ้น และเหยียดแขน",highlight:["legs"]},
+  "1373":{primary:"น่อง",secondary:"กล้ามเนื้อรอบข้อเท้า",benefit:"ฝึกแรงดันปลายเท้าและการทรงตัว",highlight:["legs"]},
+  "3013":{primary:"กล้ามก้น",secondary:"ต้นขาด้านหลังและแกนกลาง",benefit:"ฝึกเหยียดสะโพกและคุมเชิงกราน",highlight:["legs","core"]},
+  "0493":{primary:"หน้าอกและหลังแขน",secondary:"หัวไหล่ด้านหน้าและแกนกลาง",benefit:"ฝึกแรงดันช่วงบนด้วยมุมที่ง่ายกว่าวิดพื้นพื้นราบ",highlight:["arms","core"]},
+  "0662":{primary:"หน้าอกและหลังแขน",secondary:"หัวไหล่ด้านหน้าและแกนกลาง",benefit:"ฝึกแรงดันช่วงบนและการคุมลำตัว",highlight:["arms","core"]},
+  "1460":{primary:"ต้นขาด้านหน้าและกล้ามก้น",secondary:"ต้นขาด้านหลังและแกนกลาง",benefit:"ฝึกกำลังขาทีละข้างและการทรงตัว",highlight:["legs"]},
+  "3239":{primary:"กล้ามท้องและแกนกลาง",secondary:"หัวไหล่และกล้ามก้น",benefit:"ฝึกคุมลำตัวไม่ให้บิดขณะแตะไหล่",highlight:["core","arms"]},
+  "0294":{primary:"กล้ามหน้าแขน",secondary:"ปลายแขน",benefit:"ฝึกแรงงอข้อศอก",highlight:["arms"]},
+  "0334":{primary:"หัวไหล่ด้านข้าง",secondary:"หัวไหล่ด้านหน้าและบ่าบางส่วน",benefit:"ฝึกยกแขนออกด้านข้างอย่างควบคุม",highlight:["arms"]},
+  "0652":{primary:"กล้ามหลังด้านข้าง",secondary:"หน้าแขนและกล้ามหลังส่วนบน",benefit:"ฝึกแรงดึงช่วงบน",highlight:["arms","core"]},
+  "0464":{primary:"กล้ามท้องด้านข้างและแกนกลาง",secondary:"หัวไหล่และกล้ามก้น",benefit:"ฝึกคุมลำตัวขณะหมุน",highlight:["core","arms"]}
+};
+for (const exercise of HELM_EXERCISES) Object.assign(exercise, HELM_EXERCISE_MUSCLES[exercise.id]);
+
 const HELM_EXERCISE_SETS = {
   gentle:{label:"เริ่มแบบเบา ๆ",ids:["0659","1373","3013"]},
   lower:{label:"เน้นขาและสะโพก",ids:["1685","1373","1460"]},
   upper:{label:"เน้นแขนและอก",ids:["0659","0493","0294"]},
-  core:{label:"เน้นแกนกลาง",ids:["3013","3239","0464"]},
+  core:{label:"เน้นแกนกลาง",ids:["3013","0001","3239"]},
   noGear:{label:"ไม่ใช้อุปกรณ์",ids:["1685","0659","3013"]}
 };
 
 function chooseExerciseSet(query) {
   const text=String(query||"").toLowerCase();
   if (/(เจ็บ|ปวด|บาดเจ็บ|ตั้งครรภ์|โรค|ผ่าตัด|เวียนหัว|หน้ามืด|อาการ|ฟื้นฟู)/.test(text)) return null;
-  if (!/(ท่า|ออกกำลัง|ออกกําลัง|ออกกำลังกาย|exercise|workout|ยืดเหยียด|เวท)/.test(text)) return null;
-  if (!/(ขอ|แนะนำ|ส่ง|อยาก|หา|มี|ตัวอย่าง|ช่วย|ท่า|exercise|workout)/.test(text)) return null;
+  if (!/(ท่า|ออกกำลัง|ออกกําลัง|ออกกำลังกาย|exercise|workout|ยืดเหยียด|เวท|กล้าม|ซิตอัพ|วิดพื้น|แพลงก์|ดึงข้อ|ดัมเบล|sit.up|push.up)/.test(text)) return null;
+  if (!/(ขอ|แนะนำ|ส่ง|อยาก|หา|มี|ตัวอย่าง|ช่วย|ท่า|กล้าม|ซิตอัพ|วิดพื้น|แพลงก์|ดึงข้อ|ดัมเบล|exercise|workout|sit.up|push.up)/.test(text)) return null;
   if (/(ดัมเบล|แขน|หน้าอก|ไหล่|upper|arm|chest)/.test(text)) return "upper";
   if (/(หน้าท้อง|แกนกลาง|core|ท้อง|แพลงก์)/.test(text)) return "core";
   if (/(ขา|สะโพก|ก้น|เข่า|lower|leg)/.test(text)) return "lower";

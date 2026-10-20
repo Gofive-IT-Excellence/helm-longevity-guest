@@ -9,7 +9,7 @@ const HELM_EXERCISE_POSES = {
     {head:[194,50],shoulder:[198,73],hip:[160,126],elbow:[235,91],wrist:[266,67],otherElbow:[234,104],otherWrist:[266,77],knee:[136,154],ankle:[99,181],otherKnee:[150,157],otherAnkle:[117,181]}
   ],
   squat: [
-    {head:[151,38],shoulder:[149,64],hip:[149,115],elbow:[130,86],wrist:[171,86],otherElbow:[166,86],otherWrist:[183,88],knee:[139,149],ankle:[135,181],otherKnee:[169,149],otherAnkle:[173,181]},
+    {head:[151,38],shoulder:[149,64],hip:[149,115],elbow:[136,37],wrist:[130,13],otherElbow:[164,37],otherWrist:[170,13],knee:[139,149],ankle:[135,181],otherKnee:[169,149],otherAnkle:[173,181]},
     {head:[143,62],shoulder:[139,86],hip:[117,132],elbow:[121,106],wrist:[168,102],otherElbow:[153,108],otherWrist:[176,105],knee:[165,148],ankle:[174,181],otherKnee:[184,145],otherAnkle:[190,181]}
   ],
   calf: [
@@ -33,8 +33,8 @@ const HELM_EXERCISE_POSES = {
     {head:[160,51],shoulder:[155,77],hip:[157,127],elbow:[139,105],wrist:[142,124],otherElbow:[172,105],otherWrist:[176,124],knee:[207,146],ankle:[210,181],otherKnee:[109,149],otherAnkle:[88,181]}
   ],
   plank: [
-    {head:[87,76],shoulder:[111,94],hip:[185,97],elbow:[113,127],wrist:[111,163],otherElbow:[129,130],otherWrist:[128,163],knee:[227,117],ankle:[267,151],otherKnee:[238,123],otherAnkle:[276,153]},
-    {head:[87,76],shoulder:[111,94],hip:[185,97],elbow:[139,91],wrist:[158,96],otherElbow:[129,130],otherWrist:[128,163],knee:[227,117],ankle:[267,151],otherKnee:[238,123],otherAnkle:[276,153]}
+    {head:[87,76],shoulder:[111,94],hip:[185,97],elbow:[113,127],wrist:[111,163],otherElbow:[129,130],otherWrist:[128,163],knee:[230,151],ankle:[266,166],otherKnee:[239,155],otherAnkle:[275,168]},
+    {head:[87,76],shoulder:[111,94],hip:[185,97],elbow:[139,91],wrist:[158,96],otherElbow:[129,130],otherWrist:[128,163],knee:[230,151],ankle:[266,166],otherKnee:[239,155],otherAnkle:[275,168]}
   ],
   twist: [
     {head:[87,76],shoulder:[111,94],hip:[185,97],elbow:[113,127],wrist:[111,163],otherElbow:[129,130],otherWrist:[128,163],knee:[227,117],ankle:[267,151],otherKnee:[238,123],otherAnkle:[276,153]},

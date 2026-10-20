@@ -1,10 +1,10 @@
 // Curated Thai guidance adapted from the MIT-licensed instruction text in
 // https://github.com/hasaneyldrm/exercises-dataset (© 2026 Hasan Emir Yıldırım).
-// Three user-supplied exercise GIFs are credited separately to Gym visual.
+// Exercise GIFs from the source dataset are credited separately to Gym visual.
 const HELM_EXERCISES = [
-  {id:"0001",name:"ซิตอัพ 3/4",english:"3/4 sit-up",aliases:["ซิตอัพ","sit-up","sit up"],group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"5–8 ครั้ง",gif:"assets/exercises/0001-2gPfomN.gif",steps:["นอนหงาย ชันเข่า วางเท้าราบกับพื้น แล้ววางมือเบา ๆ หลังศีรษะโดยไม่ดึงคอ","เกร็งหน้าท้อง ยกลำตัวส่วนบนขึ้นช้า ๆ จนประมาณ 45 องศา หายใจออกขณะยก","หยุดสั้น ๆ แล้วลดตัวลงช้า ๆ โดยไม่กระแทกหลัง"]},
-  {id:"0002",name:"เอนตัวด้านข้างบนม้านั่งเอียง",english:"45° side bend",aliases:["เอนตัวด้านข้าง","side bend","45 degree side bend"],group:"core",level:"ท้าทาย",equipment:"ม้านั่งเอียง 45° ที่มั่นคง",dose:"ข้างละ 5–8 ครั้ง",gif:"assets/exercises/0002-Hy9D21L.gif",steps:["ปรับม้านั่งเอียงให้มั่นคงและยึดเท้าให้แน่น จัดสะโพกพาดเบาะโดยให้ลำตัวเคลื่อนไหวได้","วางมือเบา ๆ หลังศีรษะ ลดลำตัวไปด้านข้างอย่างช้า ๆ โดยไม่บิดหรือดึงคอ","เกร็งกล้ามท้องด้านข้าง ยกลำตัวกลับสู่แนวตรง แล้วสลับทำอีกด้าน"]},
-  {id:"0003",name:"ปั่นจักรยานกลางอากาศ",english:"air bike",aliases:["ท่าจักรยาน","ปั่นจักรยาน","bicycle crunch","air bike"],group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 5–8 ครั้ง",gif:"assets/exercises/0003-1ZFqTDN.gif",steps:["นอนหงาย ยกขาทั้งสองลอยจากพื้นและวางมือเบา ๆ หลังศีรษะ","งอเข่าข้างหนึ่งเข้าหาตัว พร้อมหมุนลำตัวให้ศอกฝั่งตรงข้ามเคลื่อนเข้าหาเข่า โดยไม่ดึงคอ","เหยียดขากลับแล้วสลับอีกข้างอย่างต่อเนื่องช้า ๆ"]},
+  {id:"0001",name:"ซิตอัพ 3/4",english:"3/4 sit-up",aliases:["ซิตอัพ","sit-up","sit up"],group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"5–8 ครั้ง",steps:["นอนหงาย ชันเข่า วางเท้าราบกับพื้น แล้ววางมือเบา ๆ หลังศีรษะโดยไม่ดึงคอ","เกร็งหน้าท้อง ยกลำตัวส่วนบนขึ้นช้า ๆ จนประมาณ 45 องศา หายใจออกขณะยก","หยุดสั้น ๆ แล้วลดตัวลงช้า ๆ โดยไม่กระแทกหลัง"]},
+  {id:"0002",name:"เอนตัวด้านข้างบนม้านั่งเอียง",english:"45° side bend",aliases:["เอนตัวด้านข้าง","side bend","45 degree side bend"],group:"core",level:"ท้าทาย",equipment:"ม้านั่งเอียง 45° ที่มั่นคง",dose:"ข้างละ 5–8 ครั้ง",steps:["ปรับม้านั่งเอียงให้มั่นคงและยึดเท้าให้แน่น จัดสะโพกพาดเบาะโดยให้ลำตัวเคลื่อนไหวได้","วางมือเบา ๆ หลังศีรษะ ลดลำตัวไปด้านข้างอย่างช้า ๆ โดยไม่บิดหรือดึงคอ","เกร็งกล้ามท้องด้านข้าง ยกลำตัวกลับสู่แนวตรง แล้วสลับทำอีกด้าน"]},
+  {id:"0003",name:"ปั่นจักรยานกลางอากาศ",english:"air bike",aliases:["ท่าจักรยาน","ปั่นจักรยาน","bicycle crunch","air bike"],group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 5–8 ครั้ง",steps:["นอนหงาย ยกขาทั้งสองลอยจากพื้นและวางมือเบา ๆ หลังศีรษะ","งอเข่าข้างหนึ่งเข้าหาตัว พร้อมหมุนลำตัวให้ศอกฝั่งตรงข้ามเคลื่อนเข้าหาเข่า โดยไม่ดึงคอ","เหยียดขากลับแล้วสลับอีกข้างอย่างต่อเนื่องช้า ๆ"]},
   {id:"0659",name:"วิดพื้นกับกำแพง",english:"push-up (wall)",group:"upper",level:"เริ่มต้น",equipment:"กำแพง",dose:"6–10 ครั้ง",steps:["ยืนหันหน้าเข้ากำแพง ห่างประมาณหนึ่งช่วงแขน วางมือสูงระดับไหล่และกว้างกว่าไหล่เล็กน้อย","ถอยเท้าให้ลำตัวตรง เกร็งหน้าท้อง แล้วงอศอกพาหน้าอกเข้าหากำแพง","ดันกลับช้า ๆ จนแขนเหยียด โดยคงลำตัวเป็นแนวตรง"]},
   {id:"1685",name:"ย่อตัวแล้วเหยียดแขนเหนือศีรษะ",english:"squat to overhead reach",group:"lower",level:"เริ่มต้น",equipment:"ไม่ใช้อุปกรณ์",dose:"6–10 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ปลายเท้าชี้ออกเล็กน้อย","งอเข่าและดันสะโพกไปด้านหลังเพื่อย่อตัวเท่าที่ควบคุมได้","ยืนขึ้นพร้อมเหยียดแขนเหนือศีรษะ แล้วลดแขนลงก่อนเริ่มครั้งถัดไป"]},
   {id:"1373",name:"ยืนเขย่งปลายเท้า",english:"bodyweight standing calf raise",group:"lower",level:"เริ่มต้น",equipment:"กำแพงหรือที่จับมั่นคง",dose:"8–12 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ใช้มือแตะกำแพงหรือที่จับเพื่อทรงตัว","ยกส้นเท้าขึ้นช้า ๆ ให้น้ำหนักอยู่บนปลายเท้า","หยุดสั้น ๆ แล้วลดส้นเท้าลงอย่างควบคุม"]},
@@ -18,6 +18,24 @@ const HELM_EXERCISES = [
   {id:"0652",name:"ดึงข้อ",english:"pull-up",group:"upper",level:"ท้าทาย",equipment:"บาร์โหนที่มั่นคง",dose:"เท่าที่ทำได้อย่างควบคุม",steps:["จับบาร์โดยหันฝ่ามือออกจากตัว แขนเหยียด","เกร็งแกนกลาง แล้วดึงตัวขึ้นโดยพาศอกลงและหน้าอกเข้าหาบาร์","ลดตัวลงช้า ๆ กลับสู่จุดเริ่มต้น"]},
   {id:"0464",name:"แพลงก์หมุนลำตัว",english:"front plank with twist",group:"core",level:"ท้าทาย",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 4–6 ครั้ง",steps:["เริ่มในท่าแพลงก์แขนเหยียด มืออยู่ใต้หัวไหล่","เกร็งหน้าท้องและสะโพก แล้วหมุนลำตัวพร้อมยกแขนข้างหนึ่งขึ้น","กลับท่าเริ่มต้นช้า ๆ แล้วสลับอีกข้าง"]}
 ];
+
+const HELM_EXERCISE_GIFS = {
+  "0001":"0001-2gPfomN.gif",
+  "0002":"0002-Hy9D21L.gif",
+  "0003":"0003-1ZFqTDN.gif",
+  "0659":"0659-LEH9jxP.gif",
+  "1685":"1685-QChZi3x.gif",
+  "1373":"1373-bJYHBIN.gif",
+  "3013":"3013-u0cNiij.gif",
+  "0493":"0493-B1EVP9F.gif",
+  "0662":"0662-I4hDWkc.gif",
+  "1460":"1460-IZVHb27.gif",
+  "3239":"3239-h1ezqSu.gif",
+  "0294":"0294-NbVPDMW.gif",
+  "0334":"0334-DsgkuIt.gif",
+  "0652":"0652-lBDjFxJ.gif",
+  "0464":"0464-CosupLu.gif"
+};
 
 const HELM_EXERCISE_MUSCLES = {
   "0001":{primary:"กล้ามท้องด้านหน้า",secondary:"กล้ามเนื้องอสะโพก",benefit:"ฝึกการงอลำตัวและควบคุมแกนกลาง",highlight:["core"]},
@@ -36,7 +54,10 @@ const HELM_EXERCISE_MUSCLES = {
   "0652":{primary:"กล้ามหลังด้านข้าง",secondary:"หน้าแขนและกล้ามหลังส่วนบน",benefit:"ฝึกแรงดึงช่วงบน",highlight:["arms","core"]},
   "0464":{primary:"กล้ามท้องด้านข้างและแกนกลาง",secondary:"หัวไหล่และกล้ามก้น",benefit:"ฝึกคุมลำตัวขณะหมุน",highlight:["core","arms"]}
 };
-for (const exercise of HELM_EXERCISES) Object.assign(exercise, HELM_EXERCISE_MUSCLES[exercise.id]);
+for (const exercise of HELM_EXERCISES) {
+  Object.assign(exercise, HELM_EXERCISE_MUSCLES[exercise.id]);
+  exercise.gif = `assets/exercises/${HELM_EXERCISE_GIFS[exercise.id]}`;
+}
 
 const HELM_EXERCISE_SETS = {
   gentle:{label:"เริ่มแบบเบา ๆ",ids:["0659","1373","3013"]},

@@ -21,6 +21,16 @@
 .trainer-message ul,.trainer-message ol{margin:0;padding-left:21px}.trainer-message li+li{margin-top:7px}
 .trainer-message strong{color:#095fc1}.trainer-message code{padding:1px 4px;border-radius:5px;background:#eaf4ff;font:inherit}
 .trainer-exercise-list{display:grid;gap:10px;margin-top:12px}
+.trainer-exercise-gallery{margin-top:16px;padding-top:14px;border-top:1px solid #dce9f9}
+.trainer-exercise-gallery h3{margin:0;color:#123d76;font-size:15px}
+.trainer-exercise-gallery>p{margin:3px 0 10px;color:#6381a2;font-size:12px}
+.trainer-gallery-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.trainer-gallery-item{min-width:0;padding:8px;border:1px solid #d5e8fb;border-radius:13px;background:#f7fbff;color:#174a80;text-align:center;font:inherit;cursor:pointer}
+.trainer-gallery-item:focus-visible{outline:2px solid #0879ed;outline-offset:2px}
+.trainer-gallery-item img{display:block;width:100%;max-width:150px;height:auto;aspect-ratio:1;margin:auto;object-fit:contain;mix-blend-mode:multiply}
+.trainer-gallery-item strong,.trainer-gallery-item span{display:block;line-height:1.35;overflow-wrap:anywhere}
+.trainer-gallery-item strong{font-size:12px}.trainer-gallery-item span{margin-top:2px;color:#6381a2;font-size:10px}
+.trainer-exercise-gallery>small{display:block;margin-top:8px;color:#8095ad;font-size:10px}.trainer-exercise-gallery a{color:#3979bd}
 .trainer-recent{display:flex;align-items:center;gap:9px;width:100%;margin:0 0 8px;padding:7px 10px;border:1px solid #cfe4fa;border-radius:13px;background:#f2f9ff;color:#174a80;text-align:left;font:inherit;font-size:12px;cursor:pointer}
 .trainer-recent img{width:42px;height:42px;flex:none;object-fit:contain;mix-blend-mode:multiply}
 .trainer-recent span{display:grid;gap:2px}.trainer-recent small{color:#6687a8;font-size:11px}

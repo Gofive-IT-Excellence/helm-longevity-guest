@@ -83,6 +83,22 @@ function trainerExerciseCards(ids) {
   }).join("")}</div>`;
 }
 
+function trainerExerciseGallery(ids) {
+  return `<section class="trainer-exercise-gallery" aria-label="ภาพตัวอย่างท่าฝึกแขน"><h3>ภาพตัวอย่างท่าฝึกแขน</h3><p>ท่าจากคลัง HELM ที่ใช้ฝึกกล้ามแขน เลือกภาพเพื่อดูวิธีทำและกล้ามเนื้อที่ใช้</p><div class="trainer-gallery-grid">${ids.map(id => {
+    const item = HELM_EXERCISES.find(exercise => exercise.id === id);
+    if (!item) return "";
+    return `<button type="button" class="trainer-gallery-item" data-action="trainer-show-exercise" data-exercise="${esc(item.id)}"><img src="${esc(item.gif)}" width="180" height="180" alt="ภาพเคลื่อนไหวท่า ${esc(item.name)}" loading="lazy"><strong>${esc(item.name)}</strong><span>${esc(item.primary)}</span></button>`;
+  }).join("")}</div><small>ภาพ GIF © <a href="https://gymvisual.com/" target="_blank" rel="noopener noreferrer">Gym visual</a></small></section>`;
+}
+
+function trainerIllustrationsForQuestion(question) {
+  const text = String(question || "").toLowerCase();
+  if (/(เจ็บ|ปวด|บาดเจ็บ|ตั้งครรภ์|โรค|ผ่าตัด|เวียนหัว|หน้ามืด|อาการ|ฟื้นฟู)/.test(text)) return null;
+  if (!/(อยาก|แนะนำ|ท่าไหน|ท่าอะไร|เล่นท่า|ฝึกท่า|ขอท่า)/.test(text)) return null;
+  if (!/(กล้ามแขน|เล่นแขน|ฝึกแขน|หน้าแขน|หลังแขน|biceps|triceps|arm muscle)/.test(text)) return null;
+  return ["0294", "0662", "0659"];
+}
+
 function trainerSuggestExercises(setKey, singleId, previousIds, showImage = false) {
   const selected = HELM_EXERCISE_SETS[setKey] || HELM_EXERCISE_SETS.gentle;
   const exercises = singleId ? [singleId] : previousIds || selected.ids;
@@ -94,13 +110,14 @@ function trainerSuggestExercises(setKey, singleId, previousIds, showImage = fals
 }
 
 function trainerPage() {
-  const latestExerciseIds = [...trainerMessages].reverse().find(message => message.exercises)?.exercises;
+  const latestExerciseMessage = [...trainerMessages].reverse().find(message => message.exercises || message.gallery);
+  const latestExerciseIds = latestExerciseMessage?.exercises || latestExerciseMessage?.gallery;
   const latestExercise = latestExerciseIds && HELM_EXERCISES.find(exercise => exercise.id === latestExerciseIds[0]);
   return `<div class="trainer-page" aria-label="แชต AI เทรนเนอร์">
     <div class="trainer-heading"><span class="trainer-heading-mark">${icon("coach")}</span><div><h1>AI เทรนเนอร์</h1><p>คุยเรื่องการออกกำลังกายกับ HELM</p></div></div>
     <div class="trainer-exercise-shortcuts" aria-label="เลือกท่าออกกำลังกาย">${Object.entries(HELM_EXERCISE_SETS).map(([key,set]) => `<button type="button" data-action="trainer-exercise-set" data-set="${key}" ${trainerBusy ? "disabled" : ""}>${esc(set.label)}</button>`).join("")}</div>
     <div id="trainer-chat" class="trainer-chat" role="log" aria-live="polite">${trainerMessages.map(message =>
-      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) + (message.exercises ? trainerExerciseCards(message.exercises) : "") : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ… บางคำถามอาจใช้เวลา 1–3 นาที</p></div>' : ""}</div>
+      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) + (message.exercises ? trainerExerciseCards(message.exercises) : "") + (message.gallery ? trainerExerciseGallery(message.gallery) : "") : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ… บางคำถามอาจใช้เวลา 1–3 นาที</p></div>' : ""}</div>
     ${latestExercise ? `<button type="button" class="trainer-recent" data-action="trainer-show-recent"><img src="${esc(latestExercise.gif)}" width="42" height="42" alt=""><span>ท่าที่ดูล่าสุด: <strong>${esc(latestExercise.name)}${latestExerciseIds.length > 1 ? ` และอีก ${latestExerciseIds.length - 1} ท่า` : ""}</strong><small>แตะเพื่อดูภาพและรายละเอียดอีกครั้ง</small></span></button>` : ""}
     ${trainerPendingPhoto ? `<div class="trainer-photo-preview"><img src="${esc(trainerPendingPhoto)}" alt="รูปอาหารที่จะแนบ"><span>รูปอาหารพร้อมส่ง</span><button type="button" data-action="trainer-remove-photo" aria-label="ลบรูปที่แนบ">×</button></div>` : ""}
     <form id="trainer-form" class="trainer-compose"><button class="trainer-attach" type="button" data-action="trainer-camera" aria-label="ถ่ายรูปอาหาร" title="ถ่ายรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("camera")}</button><button class="trainer-attach" type="button" data-action="trainer-gallery" aria-label="เลือกรูปอาหาร" title="เลือกรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("upload")}</button><input name="message" type="text" maxlength="1000" autocomplete="off" aria-label="พิมพ์คำถามถึง AI เทรนเนอร์" placeholder="${previewMode ? "โหมดทดลองยังไม่เชื่อม HELM AI" : "ถาม HELM หรือแนบรูปอาหาร…"}" ${previewMode ? "disabled" : ""}><button class="trainer-send" type="submit" aria-label="ส่งข้อความ" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("send")}</button><input id="trainer-camera-input" class="trainer-file-input" type="file" accept="image/*" capture="environment" aria-label="ถ่ายรูปอาหาร"><input id="trainer-gallery-input" class="trainer-file-input" type="file" accept="image/*" aria-label="เลือกรูปอาหาร"></form>
@@ -123,8 +140,12 @@ document.addEventListener("click", event => {
   if (action === "trainer-exercise-set") {
     if (!trainerBusy && signedIn) trainerSuggestExercises(event.target.closest("[data-set]")?.dataset.set);
   } else if (action === "trainer-show-recent") {
-    const latestIds = [...trainerMessages].reverse().find(message => message.exercises)?.exercises;
+    const latestMessage = [...trainerMessages].reverse().find(message => message.exercises || message.gallery);
+    const latestIds = latestMessage?.exercises || latestMessage?.gallery;
     if (!trainerBusy && signedIn && latestIds) trainerSuggestExercises(null, null, latestIds, true);
+  } else if (action === "trainer-show-exercise") {
+    const id = event.target.closest("[data-exercise]")?.dataset.exercise;
+    if (!trainerBusy && signedIn && HELM_EXERCISES.some(exercise => exercise.id === id)) trainerSuggestExercises(null, id, null, true);
   } else if (action === "trainer-camera" || action === "trainer-gallery") {
     if (!trainerBusy && !trainerPhotoLoading) $(action === "trainer-camera" ? "#trainer-camera-input" : "#trainer-gallery-input")?.click();
   } else if (action === "trainer-remove-photo") {
@@ -186,6 +207,7 @@ document.addEventListener("submit", async event => {
   trainerMessages.push({role: "user", content: text, photo});
   trainerPendingPhoto = "";
   const lowerText = text.toLowerCase();
+  const illustrationIds = photo ? null : trainerIllustrationsForQuestion(text);
   const namedExercise = !photo && findNamedExercise(text);
   const refersToPrevious = /(ท่านี้|ท่านั้น|ท่าที่ส่ง|ท่าข้างต้น|ท่าก่อนหน้า|ท่าเมื่อกี้|ภาพท่า|รูปท่า|ภาพของท่า|รูปของท่า)/.test(lowerText);
   const asksForImage = /(ภาพ|รูป|gif|คลิป|เคลื่อนไหว|ดูท่า)/.test(lowerText);
@@ -207,7 +229,7 @@ document.addEventListener("submit", async event => {
     const result = await apiCall("ai.trainer", {messages: history, ...(photo ? {photo} : {})});
     if (!signedIn || epoch !== trainerEpoch) return;
     if (typeof result.answer !== "string" || !result.answer.trim()) throw new Error("HELM ไม่ส่งคำตอบกลับมา");
-    trainerMessages.push({role: "assistant", content: result.answer});
+    trainerMessages.push({role: "assistant", content: result.answer, ...(illustrationIds ? {gallery: illustrationIds} : {})});
   } catch (error) {
     if (signedIn && epoch === trainerEpoch) trainerMessages.push({role: "system", content: error.message || "เชื่อมต่อ HELM ไม่สำเร็จ"});
   } finally {

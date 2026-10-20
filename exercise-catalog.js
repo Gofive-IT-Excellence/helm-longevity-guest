@@ -64,7 +64,7 @@ for (const exercise of HELM_EXERCISES) {
 
 const HELM_EXERCISE_SETS = {
   gentle:{label:"เริ่มแบบเบา ๆ",ids:["0659","1373","3013"]},
-  belly:{label:"ลดพุงและฝึกแกนกลาง",ids:["3239","0003","1685"]},
+  belly:{label:"ลดพุงและฝึกแกนกลาง",ids:["3239","0003"]},
   lower:{label:"เน้นขาและสะโพก",ids:["1685","1373","1460"]},
   upper:{label:"เน้นแขนและอก",ids:["0659","0493","0294"]},
   core:{label:"เน้นแกนกลาง",ids:["3679","0003","3239"]},

@@ -79,3 +79,12 @@ function chooseExerciseSet(query) {
   if (/(ไม่มีอุปกรณ์|ไม่ใช้อุปกรณ์|ที่บ้าน|bodyweight)/.test(text)) return "noGear";
   return "gentle";
 }
+
+function findNamedExercise(query) {
+  const text = String(query || "").toLowerCase().replace(/วิทพื้น/g, "วิดพื้น");
+  const names = HELM_EXERCISES.flatMap(exercise =>
+    [exercise.name, exercise.english, ...(exercise.aliases || [])]
+      .map(name => ({exercise, name: name.toLowerCase()}))
+  ).sort((a, b) => b.name.length - a.name.length);
+  return names.find(({name}) => text.includes(name))?.exercise || null;
+}

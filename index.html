@@ -1356,12 +1356,15 @@ document.addEventListener("submit", async event => {
   if (!text || trainerPhotoLoading) return;
   trainerMessages.push({role: "user", content: text, photo});
   trainerPendingPhoto = "";
-  const requestedSet = !photo && chooseExerciseSet(text);
-  if (requestedSet) {
-    const lowerText = text.toLowerCase();
-    const namedExercise = HELM_EXERCISES.find(exercise => [exercise.name,exercise.english,...(exercise.aliases || [])].some(name => lowerText.includes(name.toLowerCase())));
-    const priorExercises = !namedExercise && /(กล้าม|ส่วนไหน|บริเวณไหน|ตรงไหน|ประโยชน์|ได้อะไร)/.test(lowerText)
-      ? [...trainerMessages].reverse().find(message => message.exercises)?.exercises : null;
+  const lowerText = text.toLowerCase();
+  const namedExercise = !photo && HELM_EXERCISES.find(exercise => [exercise.name,exercise.english,...(exercise.aliases || [])].some(name => lowerText.includes(name.toLowerCase())));
+  const refersToPrevious = /(ท่านี้|ท่าที่ส่ง|ท่าข้างต้น|ท่าก่อนหน้า|ท่าเมื่อกี้)/.test(lowerText);
+  const priorExercises = !photo && !namedExercise && refersToPrevious && /(กล้าม|ส่วนไหน|บริเวณไหน|ตรงไหน|ประโยชน์|ได้อะไร|ทำอย่างไร|ทำยังไง)/.test(lowerText)
+    ? [...trainerMessages].reverse().find(message => message.exercises)?.exercises : null;
+  const asksForExercises = /(ขอ|แนะนำ|ส่ง|อยาก|ช่วยเลือก|หา|มีท่า|ท่าอะไร|ท่าไหน|ตัวอย่าง)/.test(lowerText);
+  const asksAboutExercise = /(ใช้กล้าม|กล้ามเนื้ออะไร|ได้กล้าม|ทำอย่างไร|ทำยังไง)/.test(lowerText);
+  const requestedSet = !photo && !refersToPrevious && !asksAboutExercise && asksForExercises && chooseExerciseSet(text);
+  if (namedExercise || priorExercises || requestedSet) {
     trainerSuggestExercises(requestedSet, namedExercise?.id, priorExercises);
     return;
   }

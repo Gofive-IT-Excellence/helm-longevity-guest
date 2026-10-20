@@ -10,7 +10,7 @@ async function apiCall(action,payload={}){
   if(!cfg.webhookBaseUrl)throw new Error("ยังไม่ได้ตั้งค่า n8n สำหรับเว็บนี้");
   const endpoint=cfg.webhookBaseUrl.replace(/\/$/,"")+"/"+action.replace(".","/");
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),90000);
+  const timer=setTimeout(()=>controller.abort(),action==="ai.trainer"?190000:90000);
   try{
     const response=await fetch(endpoint,{method:"POST",mode:"cors",cache:"no-store",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action,payload}),signal:controller.signal});
     const result=await response.json().catch(()=>({}));

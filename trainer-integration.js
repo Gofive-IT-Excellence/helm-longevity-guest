@@ -231,7 +231,13 @@ document.addEventListener("submit", async event => {
     if (typeof result.answer !== "string" || !result.answer.trim()) throw new Error("HELM ไม่ส่งคำตอบกลับมา");
     trainerMessages.push({role: "assistant", content: result.answer, ...(illustrationIds ? {gallery: illustrationIds} : {})});
   } catch (error) {
-    if (signedIn && epoch === trainerEpoch) trainerMessages.push({role: "system", content: error.message || "เชื่อมต่อ HELM ไม่สำเร็จ"});
+    if (signedIn && epoch === trainerEpoch) {
+      if (illustrationIds) {
+        trainerMessages.push({role: "assistant", content: "HELM AI ยังไม่ตอบในขณะนี้ ลองดูท่าฝึกแขนจากคลัง HELM ก่อนครับ: ดัมเบลงอข้อศอกเน้นหน้าแขน วิดพื้นช่วยฝึกหลังแขนและหน้าอก หากเพิ่งเริ่มให้ใช้วิดพื้นกับกำแพงก่อน เลือกจำนวนครั้งที่ทำได้อย่างควบคุม และพักระหว่างวันฝึก", gallery: illustrationIds});
+      } else {
+        trainerMessages.push({role: "system", content: error.message || "เชื่อมต่อ HELM ไม่สำเร็จ"});
+      }
+    }
   } finally {
     if (epoch !== trainerEpoch) return;
     trainerBusy = false;

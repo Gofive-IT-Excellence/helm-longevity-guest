@@ -74,14 +74,32 @@ function trainerAnswerHtml(content) {
   return blocks.join("");
 }
 
+function trainerExerciseCards(ids) {
+  return `<div class="trainer-exercise-list">${ids.map(id => {
+    const item = HELM_EXERCISES.find(exercise => exercise.id === id);
+    if (!item) return "";
+    return `<article class="trainer-exercise-card"><div class="trainer-exercise-head"><div><span class="trainer-exercise-kicker">ท่า ${esc(item.id)} · ${esc(item.level)}</span><h3>${esc(item.name)}</h3><span class="trainer-exercise-english">${esc(item.english)}</span></div><span class="trainer-exercise-dose">${esc(item.dose)}</span></div><p class="trainer-exercise-equipment">อุปกรณ์: ${esc(item.equipment)}</p><ol>${item.steps.map(step => `<li>${esc(step)}</li>`).join("")}</ol></article>`;
+  }).join("")}</div>`;
+}
+
+function trainerSuggestExercises(setKey, singleId) {
+  const selected = HELM_EXERCISE_SETS[setKey] || HELM_EXERCISE_SETS.gentle;
+  trainerMessages.push({role:"assistant",content:singleId ? "วิธีทำท่านี้แบบสั้น ๆ" : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises:singleId ? [singleId] : selected.ids});
+  if (state.tab === "trainer") {
+    render();
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  }
+}
+
 function trainerPage() {
   return `<div class="trainer-page" aria-label="แชต AI เทรนเนอร์">
     <div class="trainer-heading"><span class="trainer-heading-mark">${icon("coach")}</span><div><h1>AI เทรนเนอร์</h1><p>คุยเรื่องการออกกำลังกายกับ HELM</p></div></div>
+    <div class="trainer-exercise-shortcuts" aria-label="เลือกท่าออกกำลังกาย">${Object.entries(HELM_EXERCISE_SETS).map(([key,set]) => `<button type="button" data-action="trainer-exercise-set" data-set="${key}" ${trainerBusy ? "disabled" : ""}>${esc(set.label)}</button>`).join("")}</div>
     <div id="trainer-chat" class="trainer-chat" role="log" aria-live="polite">${trainerMessages.map(message =>
-      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ…</p></div>' : ""}</div>
+      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) + (message.exercises ? trainerExerciseCards(message.exercises) : "") : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ…</p></div>' : ""}</div>
     ${trainerPendingPhoto ? `<div class="trainer-photo-preview"><img src="${esc(trainerPendingPhoto)}" alt="รูปอาหารที่จะแนบ"><span>รูปอาหารพร้อมส่ง</span><button type="button" data-action="trainer-remove-photo" aria-label="ลบรูปที่แนบ">×</button></div>` : ""}
     <form id="trainer-form" class="trainer-compose"><button class="trainer-attach" type="button" data-action="trainer-camera" aria-label="ถ่ายรูปอาหาร" title="ถ่ายรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("camera")}</button><button class="trainer-attach" type="button" data-action="trainer-gallery" aria-label="เลือกรูปอาหาร" title="เลือกรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("upload")}</button><input name="message" type="text" maxlength="1000" autocomplete="off" aria-label="พิมพ์คำถามถึง AI เทรนเนอร์" placeholder="${previewMode ? "โหมดทดลองยังไม่เชื่อม HELM AI" : "ถาม HELM หรือแนบรูปอาหาร…"}" ${previewMode ? "disabled" : ""}><button class="trainer-send" type="submit" aria-label="ส่งข้อความ" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("send")}</button><input id="trainer-camera-input" class="trainer-file-input" type="file" accept="image/*" capture="environment" aria-label="ถ่ายรูปอาหาร"><input id="trainer-gallery-input" class="trainer-file-input" type="file" accept="image/*" aria-label="เลือกรูปอาหาร"></form>
-    <p class="trainer-note">${previewMode ? "โหมดทดลอง • เปิดแชตได้เมื่อเชื่อมบัญชีบริษัทและ HELM AI" : "คำแนะนำทั่วไป • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม"}</p>
+    <p class="trainer-note">ท่าออกกำลังกายอ้างอิงข้อมูลจาก <a href="https://github.com/hasaneyldrm/exercises-dataset" target="_blank" rel="noopener noreferrer">Exercises Dataset</a> (© Hasan Emir Yıldırım, MIT) • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม</p>
   </div>`;
 }
 
@@ -97,7 +115,9 @@ render = function () {
 
 document.addEventListener("click", event => {
   const action = event.target.closest("[data-action]")?.dataset.action;
-  if (action === "trainer-camera" || action === "trainer-gallery") {
+  if (action === "trainer-exercise-set") {
+    if (!trainerBusy && signedIn) trainerSuggestExercises(event.target.closest("[data-set]")?.dataset.set);
+  } else if (action === "trainer-camera" || action === "trainer-gallery") {
     if (!trainerBusy && !trainerPhotoLoading) $(action === "trainer-camera" ? "#trainer-camera-input" : "#trainer-gallery-input")?.click();
   } else if (action === "trainer-remove-photo") {
     trainerPendingPhoto = "";
@@ -157,6 +177,13 @@ document.addEventListener("submit", async event => {
   if (!text || trainerPhotoLoading) return;
   trainerMessages.push({role: "user", content: text, photo});
   trainerPendingPhoto = "";
+  const requestedSet = !photo && chooseExerciseSet(text);
+  if (requestedSet) {
+    const lowerText = text.toLowerCase();
+    const namedExercise = HELM_EXERCISES.find(exercise => lowerText.includes(exercise.name.toLowerCase()) || lowerText.includes(exercise.english));
+    trainerSuggestExercises(requestedSet, namedExercise?.id);
+    return;
+  }
   const epoch = trainerEpoch;
   trainerBusy = true;
   render();

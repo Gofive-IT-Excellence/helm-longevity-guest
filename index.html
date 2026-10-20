@@ -508,6 +508,10 @@ body.authenticated .auth-root{display:none}
 .trainer-heading-mark svg{width:27px;height:27px}
 .trainer-heading h1{margin:0;color:#123d76;font-size:24px;line-height:1.2;font-weight:400}
 .trainer-heading p{margin:1px 0 0;color:#6984a8;font-size:13px}
+.trainer-exercise-shortcuts{display:flex;gap:7px;overflow-x:auto;padding:3px 1px 8px;scrollbar-width:thin}
+.trainer-exercise-shortcuts button{flex:none;padding:8px 12px;border:1px solid #cde2fb;border-radius:999px;background:#fff;color:#0868c9;font:inherit;font-size:12px;cursor:pointer}
+.trainer-exercise-shortcuts button:focus-visible{outline:2px solid #0879ed;outline-offset:2px}
+.trainer-exercise-shortcuts button:disabled{opacity:.55;cursor:default}
 .trainer-status{margin-left:auto;flex:none;padding:6px 9px;border:1px solid #d4e6fa;border-radius:999px;color:#6783a5;background:#f8fbff;font-size:10px}
 .trainer-chat{min-height:260px;flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 0 18px}
 .trainer-message{max-width:88%;margin:0;padding:12px 15px;border-radius:17px;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
@@ -517,6 +521,16 @@ body.authenticated .auth-root{display:none}
 .trainer-message p{margin:0}.trainer-message p+p,.trainer-message p+ul,.trainer-message p+ol,.trainer-message ul+p,.trainer-message ol+p{margin-top:10px}
 .trainer-message ul,.trainer-message ol{margin:0;padding-left:21px}.trainer-message li+li{margin-top:7px}
 .trainer-message strong{color:#095fc1}.trainer-message code{padding:1px 4px;border-radius:5px;background:#eaf4ff;font:inherit}
+.trainer-exercise-list{display:grid;gap:10px;margin-top:12px}
+.trainer-exercise-card{padding:13px;border:1px solid #d5e8fb;border-radius:14px;background:#f7fbff}
+.trainer-exercise-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.trainer-exercise-kicker{color:#3979bd;font-size:11px}
+.trainer-exercise-card h3{margin:2px 0 0;color:#123d76;font-size:16px;line-height:1.3}
+.trainer-exercise-english{color:#8299b4;font-size:11px}
+.trainer-exercise-dose{flex:none;padding:5px 8px;border-radius:999px;background:#e1f2ff;color:#0872d7;font-size:11px}
+.trainer-exercise-equipment{margin:9px 0!important;color:#567498;font-size:12px}
+.trainer-exercise-card ol{margin:0;padding-left:21px;font-size:13px;line-height:1.55}
+.trainer-exercise-card li+li{margin-top:5px}
 .trainer-message-photo{display:block;width:min(220px,100%);max-height:220px;object-fit:cover;margin-top:9px;border-radius:12px}
 .trainer-photo-preview{display:flex;align-items:center;gap:9px;margin:0 0 8px;padding:7px 9px;border:1px solid #cfe4fa;border-radius:14px;color:#3c6798;background:#fff;font-size:12px}
 .trainer-photo-preview img{width:43px;height:43px;object-fit:cover;border-radius:9px}.trainer-photo-preview span{flex:1}.trainer-photo-preview button{width:30px;height:30px;border:0;border-radius:50%;color:#557ca8;background:#ecf5ff;font-size:21px}
@@ -529,6 +543,7 @@ body.authenticated .auth-root{display:none}
 .trainer-compose .trainer-file-input{display:none}
 .trainer-compose button:disabled{background:#c7d8ed;cursor:default}
 .trainer-note{margin:8px 2px 0;color:#8299b4;font-size:11px;line-height:1.4;text-align:center}
+.trainer-note a{color:#0868c9}
 @media(min-width:761px){.trainer-page{min-height:calc(100dvh - 210px)}.trainer-compose{bottom:20px}}
 @media(max-width:380px){.trainer-compose{gap:5px;padding:6px}.trainer-compose .trainer-attach{width:30px}.trainer-compose input[name="message"]{padding-inline:3px}}
 
@@ -1070,6 +1085,44 @@ document.addEventListener("click", async event => {
   }
 });
 
+// Curated Thai guidance adapted from the MIT-licensed instruction text in
+// https://github.com/hasaneyldrm/exercises-dataset (© 2026 Hasan Emir Yıldırım).
+// The source repository's images/GIFs have a separate license and are not used.
+const HELM_EXERCISES = [
+  {id:"0659",name:"วิดพื้นกับกำแพง",english:"push-up (wall)",group:"upper",level:"เริ่มต้น",equipment:"กำแพง",dose:"6–10 ครั้ง",steps:["ยืนหันหน้าเข้ากำแพง ห่างประมาณหนึ่งช่วงแขน วางมือสูงระดับไหล่และกว้างกว่าไหล่เล็กน้อย","ถอยเท้าให้ลำตัวตรง เกร็งหน้าท้อง แล้วงอศอกพาหน้าอกเข้าหากำแพง","ดันกลับช้า ๆ จนแขนเหยียด โดยคงลำตัวเป็นแนวตรง"]},
+  {id:"1685",name:"ย่อตัวแล้วเหยียดแขนเหนือศีรษะ",english:"squat to overhead reach",group:"lower",level:"เริ่มต้น",equipment:"ไม่ใช้อุปกรณ์",dose:"6–10 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ปลายเท้าชี้ออกเล็กน้อย","งอเข่าและดันสะโพกไปด้านหลังเพื่อย่อตัวเท่าที่ควบคุมได้","ยืนขึ้นพร้อมเหยียดแขนเหนือศีรษะ แล้วลดแขนลงก่อนเริ่มครั้งถัดไป"]},
+  {id:"1373",name:"ยืนเขย่งปลายเท้า",english:"bodyweight standing calf raise",group:"lower",level:"เริ่มต้น",equipment:"กำแพงหรือที่จับมั่นคง",dose:"8–12 ครั้ง",steps:["ยืนแยกเท้ากว้างประมาณไหล่ ใช้มือแตะกำแพงหรือที่จับเพื่อทรงตัว","ยกส้นเท้าขึ้นช้า ๆ ให้น้ำหนักอยู่บนปลายเท้า","หยุดสั้น ๆ แล้วลดส้นเท้าลงอย่างควบคุม"]},
+  {id:"3013",name:"สะพานยกสะโพก",english:"low glute bridge on floor",group:"lower",level:"เริ่มต้น",equipment:"พื้นหรือเสื่อ",dose:"6–10 ครั้ง",steps:["นอนหงาย ชันเข่า วางเท้าราบกับพื้นและวางแขนข้างลำตัว","เกร็งก้นและหน้าท้อง ยกสะโพกจนแนวไหล่ถึงเข่าเกือบตรง","หยุดสั้น ๆ แล้วลดสะโพกลงช้า ๆ"]},
+  {id:"0493",name:"วิดพื้นมือสูง",english:"incline push-up",group:"upper",level:"ปานกลาง",equipment:"โต๊ะหรือม้านั่งที่มั่นคง",dose:"6–10 ครั้ง",steps:["วางมือบนพื้นผิวที่มั่นคง สูงกว่าพื้นเล็กน้อยและกว้างกว่าไหล่เล็กน้อย","เหยียดขาไปด้านหลัง ให้ศีรษะถึงส้นเท้าเป็นแนวตรง","งอศอกลดหน้าอกลง แล้วดันกลับอย่างควบคุม"]},
+  {id:"0662",name:"วิดพื้น",english:"push-up",group:"upper",level:"ปานกลาง",equipment:"ไม่ใช้อุปกรณ์",dose:"5–8 ครั้ง",steps:["เริ่มในท่าแพลงก์แขนเหยียด วางมือกว้างกว่าไหล่เล็กน้อย","เกร็งลำตัวแล้วงอศอก ลดตัวลงโดยรักษาแนวลำตัว","ดันตัวกลับขึ้นโดยไม่แอ่นหลัง"]},
+  {id:"1460",name:"ก้าวย่อเดินหน้า",english:"walking lunge",group:"lower",level:"ปานกลาง",equipment:"พื้นที่เดิน",dose:"ข้างละ 5–8 ครั้ง",steps:["ยืนตัวตรง แยกเท้ากว้างประมาณไหล่","ก้าวขาข้างหนึ่งไปข้างหน้า แล้วย่อตัวโดยให้ลำตัวตั้งตรงและเข่าหน้าอยู่แนวเดียวกับข้อเท้า","ดันพื้นกลับขึ้นแล้วก้าวสลับอีกข้างอย่างช้า ๆ"]},
+  {id:"3239",name:"แพลงก์แตะไหล่",english:"kneeling plank tap shoulder",group:"core",level:"ปานกลาง",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 5–8 ครั้ง",steps:["วางมือกว้างประมาณไหล่ เหยียดขาไปด้านหลังในท่าแพลงก์","เกร็งหน้าท้องและพยายามให้สะโพกนิ่ง","ยกมือหนึ่งแตะไหล่ตรงข้าม วางมือลง แล้วสลับอีกข้าง"]},
+  {id:"0294",name:"ดัมเบลยกแขนด้านหน้า",english:"dumbbell biceps curl",group:"upper",level:"ปานกลาง",equipment:"ดัมเบล",dose:"6–10 ครั้ง",steps:["ยืนตัวตรง ถือดัมเบลข้างลำตัว หงายฝ่ามือไปด้านหน้า","ตรึงต้นแขนไว้ข้างลำตัว แล้วงอศอกยกดัมเบลขึ้น","ลดดัมเบลลงช้า ๆ โดยไม่เหวี่ยงลำตัว"]},
+  {id:"0334",name:"ดัมเบลกางแขนข้าง",english:"dumbbell lateral raise",group:"upper",level:"ปานกลาง",equipment:"ดัมเบล",dose:"6–10 ครั้ง",steps:["ยืนตัวตรง ถือดัมเบลข้างลำตัว งอศอกเล็กน้อย","กางแขนออกด้านข้างจนใกล้ระดับไหล่ โดยไม่ยักไหล่","ลดแขนลงช้า ๆ และรักษาลำตัวให้นิ่ง"]},
+  {id:"0652",name:"ดึงข้อ",english:"pull-up",group:"upper",level:"ท้าทาย",equipment:"บาร์โหนที่มั่นคง",dose:"เท่าที่ทำได้อย่างควบคุม",steps:["จับบาร์โดยหันฝ่ามือออกจากตัว แขนเหยียด","เกร็งแกนกลาง แล้วดึงตัวขึ้นโดยพาศอกลงและหน้าอกเข้าหาบาร์","ลดตัวลงช้า ๆ กลับสู่จุดเริ่มต้น"]},
+  {id:"0464",name:"แพลงก์หมุนลำตัว",english:"front plank with twist",group:"core",level:"ท้าทาย",equipment:"พื้นหรือเสื่อ",dose:"ข้างละ 4–6 ครั้ง",steps:["เริ่มในท่าแพลงก์แขนเหยียด มืออยู่ใต้หัวไหล่","เกร็งหน้าท้องและสะโพก แล้วหมุนลำตัวพร้อมยกแขนข้างหนึ่งขึ้น","กลับท่าเริ่มต้นช้า ๆ แล้วสลับอีกข้าง"]}
+];
+
+const HELM_EXERCISE_SETS = {
+  gentle:{label:"เริ่มแบบเบา ๆ",ids:["0659","1373","3013"]},
+  lower:{label:"เน้นขาและสะโพก",ids:["1685","1373","1460"]},
+  upper:{label:"เน้นแขนและอก",ids:["0659","0493","0294"]},
+  core:{label:"เน้นแกนกลาง",ids:["3013","3239","0464"]},
+  noGear:{label:"ไม่ใช้อุปกรณ์",ids:["1685","0659","3013"]}
+};
+
+function chooseExerciseSet(query) {
+  const text=String(query||"").toLowerCase();
+  if (/(เจ็บ|ปวด|บาดเจ็บ|ตั้งครรภ์|โรค|ผ่าตัด|เวียนหัว|หน้ามืด|อาการ|ฟื้นฟู)/.test(text)) return null;
+  if (!/(ท่า|ออกกำลัง|ออกกําลัง|ออกกำลังกาย|exercise|workout|ยืดเหยียด|เวท)/.test(text)) return null;
+  if (!/(ขอ|แนะนำ|ส่ง|อยาก|หา|มี|ตัวอย่าง|ช่วย|ท่า|exercise|workout)/.test(text)) return null;
+  if (/(ดัมเบล|แขน|หน้าอก|ไหล่|upper|arm|chest)/.test(text)) return "upper";
+  if (/(หน้าท้อง|แกนกลาง|core|ท้อง|แพลงก์)/.test(text)) return "core";
+  if (/(ขา|สะโพก|ก้น|เข่า|lower|leg)/.test(text)) return "lower";
+  if (/(ไม่มีอุปกรณ์|ไม่ใช้อุปกรณ์|ที่บ้าน|bodyweight)/.test(text)) return "noGear";
+  return "gentle";
+}
+
 ICONS.coach='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"></path></svg>';
 ICONS.send='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M227.32,28.68a16,16,0,0,0-16.41-3.93L32.41,92.86a16,16,0,0,0,.8,30.14l74.89,25,25,74.89a16,16,0,0,0,15,10.95h.4a16,16,0,0,0,14.74-10.55l68.11-178.5A16,16,0,0,0,227.32,28.68ZM148.5,207.27l-21.07-63.2,44.37-44.37a8,8,0,0,0-11.32-11.32l-44.37,44.37-63.2-21.07L216,49.53Z"></path></svg>';
 // Authenticated trainer chat. The browser talks only to this application's server.
@@ -1146,14 +1199,32 @@ function trainerAnswerHtml(content) {
   return blocks.join("");
 }
 
+function trainerExerciseCards(ids) {
+  return `<div class="trainer-exercise-list">${ids.map(id => {
+    const item = HELM_EXERCISES.find(exercise => exercise.id === id);
+    if (!item) return "";
+    return `<article class="trainer-exercise-card"><div class="trainer-exercise-head"><div><span class="trainer-exercise-kicker">ท่า ${esc(item.id)} · ${esc(item.level)}</span><h3>${esc(item.name)}</h3><span class="trainer-exercise-english">${esc(item.english)}</span></div><span class="trainer-exercise-dose">${esc(item.dose)}</span></div><p class="trainer-exercise-equipment">อุปกรณ์: ${esc(item.equipment)}</p><ol>${item.steps.map(step => `<li>${esc(step)}</li>`).join("")}</ol></article>`;
+  }).join("")}</div>`;
+}
+
+function trainerSuggestExercises(setKey, singleId) {
+  const selected = HELM_EXERCISE_SETS[setKey] || HELM_EXERCISE_SETS.gentle;
+  trainerMessages.push({role:"assistant",content:singleId ? "วิธีทำท่านี้แบบสั้น ๆ" : `ลองชุด ${selected.label} เริ่มด้วยจำนวนครั้งที่สบายและพักระหว่างท่าได้`,exercises:singleId ? [singleId] : selected.ids});
+  if (state.tab === "trainer") {
+    render();
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  }
+}
+
 function trainerPage() {
   return `<div class="trainer-page" aria-label="แชต AI เทรนเนอร์">
     <div class="trainer-heading"><span class="trainer-heading-mark">${icon("coach")}</span><div><h1>AI เทรนเนอร์</h1><p>คุยเรื่องการออกกำลังกายกับ HELM</p></div></div>
+    <div class="trainer-exercise-shortcuts" aria-label="เลือกท่าออกกำลังกาย">${Object.entries(HELM_EXERCISE_SETS).map(([key,set]) => `<button type="button" data-action="trainer-exercise-set" data-set="${key}" ${trainerBusy ? "disabled" : ""}>${esc(set.label)}</button>`).join("")}</div>
     <div id="trainer-chat" class="trainer-chat" role="log" aria-live="polite">${trainerMessages.map(message =>
-      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ…</p></div>' : ""}</div>
+      `<div class="trainer-message ${message.role}">${message.role === "assistant" ? trainerAnswerHtml(message.content) + (message.exercises ? trainerExerciseCards(message.exercises) : "") : `<p>${esc(message.content)}</p>${message.photo ? `<img class="trainer-message-photo" src="${esc(message.photo)}" alt="รูปอาหารที่ส่งให้ HELM">` : ""}`}</div>`).join("")}${trainerBusy ? '<div class="trainer-message assistant" role="status"><p>HELM กำลังตอบ…</p></div>' : ""}</div>
     ${trainerPendingPhoto ? `<div class="trainer-photo-preview"><img src="${esc(trainerPendingPhoto)}" alt="รูปอาหารที่จะแนบ"><span>รูปอาหารพร้อมส่ง</span><button type="button" data-action="trainer-remove-photo" aria-label="ลบรูปที่แนบ">×</button></div>` : ""}
     <form id="trainer-form" class="trainer-compose"><button class="trainer-attach" type="button" data-action="trainer-camera" aria-label="ถ่ายรูปอาหาร" title="ถ่ายรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("camera")}</button><button class="trainer-attach" type="button" data-action="trainer-gallery" aria-label="เลือกรูปอาหาร" title="เลือกรูปอาหาร" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("upload")}</button><input name="message" type="text" maxlength="1000" autocomplete="off" aria-label="พิมพ์คำถามถึง AI เทรนเนอร์" placeholder="${previewMode ? "โหมดทดลองยังไม่เชื่อม HELM AI" : "ถาม HELM หรือแนบรูปอาหาร…"}" ${previewMode ? "disabled" : ""}><button class="trainer-send" type="submit" aria-label="ส่งข้อความ" ${previewMode || trainerBusy || trainerPhotoLoading ? "disabled" : ""}>${icon("send")}</button><input id="trainer-camera-input" class="trainer-file-input" type="file" accept="image/*" capture="environment" aria-label="ถ่ายรูปอาหาร"><input id="trainer-gallery-input" class="trainer-file-input" type="file" accept="image/*" aria-label="เลือกรูปอาหาร"></form>
-    <p class="trainer-note">${previewMode ? "โหมดทดลอง • เปิดแชตได้เมื่อเชื่อมบัญชีบริษัทและ HELM AI" : "คำแนะนำทั่วไป • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม"}</p>
+    <p class="trainer-note">ท่าออกกำลังกายอ้างอิงข้อมูลจาก <a href="https://github.com/hasaneyldrm/exercises-dataset" target="_blank" rel="noopener noreferrer">Exercises Dataset</a> (© Hasan Emir Yıldırım, MIT) • หากเจ็บหรือมีอาการผิดปกติ ให้หยุดกิจกรรม</p>
   </div>`;
 }
 
@@ -1169,7 +1240,9 @@ render = function () {
 
 document.addEventListener("click", event => {
   const action = event.target.closest("[data-action]")?.dataset.action;
-  if (action === "trainer-camera" || action === "trainer-gallery") {
+  if (action === "trainer-exercise-set") {
+    if (!trainerBusy && signedIn) trainerSuggestExercises(event.target.closest("[data-set]")?.dataset.set);
+  } else if (action === "trainer-camera" || action === "trainer-gallery") {
     if (!trainerBusy && !trainerPhotoLoading) $(action === "trainer-camera" ? "#trainer-camera-input" : "#trainer-gallery-input")?.click();
   } else if (action === "trainer-remove-photo") {
     trainerPendingPhoto = "";
@@ -1229,6 +1302,13 @@ document.addEventListener("submit", async event => {
   if (!text || trainerPhotoLoading) return;
   trainerMessages.push({role: "user", content: text, photo});
   trainerPendingPhoto = "";
+  const requestedSet = !photo && chooseExerciseSet(text);
+  if (requestedSet) {
+    const lowerText = text.toLowerCase();
+    const namedExercise = HELM_EXERCISES.find(exercise => lowerText.includes(exercise.name.toLowerCase()) || lowerText.includes(exercise.english));
+    trainerSuggestExercises(requestedSet, namedExercise?.id);
+    return;
+  }
   const epoch = trainerEpoch;
   trainerBusy = true;
   render();
